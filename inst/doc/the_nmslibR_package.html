@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta name="author" content="Lampros Mouselimis" />
+
+<meta name="date" content="2018-02-27" />
+
+<title>Non Metric Space ( Approximate ) Library in R</title>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+
+
+<link href="data:text/css;charset=utf-8,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23header%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%20code%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" rel="stylesheet" type="text/css" />
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Non Metric Space ( Approximate ) Library in R</h1>
+<h4 class="author"><em>Lampros Mouselimis</em></h4>
+<h4 class="date"><em>2018-02-27</em></h4>
+
+
+
+<p>The <strong>nmslibR</strong> package is a wrapper of <a href="https://github.com/searchivarius/nmslib"><em>NMSLIB</em></a>, which according to the authors “… is a similarity search library and a toolkit for evaluation of similarity search methods. The goal of the project is to create an effective and comprehensive toolkit for searching in generic non-metric spaces. Being comprehensive is important, because no single method is likely to be sufficient in all cases. Also note that exact solutions are hardly efficient in high dimensions and/or non-metric spaces. Hence, the main focus is on approximate methods”.</p>
+<p>I’ve searched for some time (before wrapping NMSLIB) for a nearest neighbor library which can work with high dimensional data and can scale with big datasets. I’ve already written a package for k-nearest-neighbor search (<a href="https://CRAN.R-project.org/package=KernelKnn">KernelKnn</a>), however, it’s based on brute force and unfortunately, it requires a certain computation time if the data consists of many rows. The <em>nmslibR</em> package, besides the main functionality of the NMSLIB python library, also includes an Approximate Kernel k-nearest function, which as I will show in the next lines is both fast and accurate. A comparison of NMSLIB with other popular approximate k-nearest-neighbor methods can be found <a href="https://github.com/erikbern/ann-benchmarks">here</a>.</p>
+<p><br></p>
+<p>The NMSLIB Library,</p>
+<ul>
+<li>is a collection of search methods for generic spaces</li>
+<li>has both metric and non-metric search algorithms</li>
+<li>has both exact and approximate search algorithms</li>
+<li>is an evaluation toolkit that simplifies experimentation and processing of results</li>
+<li>is extensible (new spaces and methods can be added)</li>
+<li>It was designed to be efficient</li>
+</ul>
+<p><br></p>
+<p>Details can be found in the <a href="https://github.com/searchivarius/nmslib/blob/master/manual/manual.pdf">NMSLIB-manual</a>.</p>
+<p><br></p>
+<div id="the-nmslibr-package" class="section level4">
+<h4>The nmslibR package</h4>
+<p><br></p>
+<p>The <em>nmslibR</em> package includes the following R6-class / functions,</p>
+<p><br></p>
+<div id="class" class="section level5">
+<h5><strong>class</strong></h5>
+<p><br></p>
+<table>
+<thead>
+<tr class="header">
+<th align="center">NMSlib</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">Knn_Query()</td>
+</tr>
+<tr class="even">
+<td align="center">knn_Query_Batch()</td>
+</tr>
+<tr class="odd">
+<td align="center">save_Index()</td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+</div>
+<div id="functions" class="section level5">
+<h5><strong>functions</strong></h5>
+<p><br></p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">KernelKnn_nmslib()</th>
+</tr>
+</thead>
+<tbody>
+</tbody>
+</table>
+<table>
+<thead>
+<tr class="header">
+<th align="left">KernelKnnCV_nmslib()</th>
+</tr>
+</thead>
+<tbody>
+</tbody>
+</table>
+<table>
+<thead>
+<tr class="header">
+<th align="left">dgCMatrix_2scipy_sparse()</th>
+</tr>
+</thead>
+<tbody>
+</tbody>
+</table>
+<table>
+<thead>
+<tr class="header">
+<th align="left">mat_2scipy_sparse()</th>
+</tr>
+</thead>
+<tbody>
+</tbody>
+</table>
+<p><br></p>
+<p>The package documentation includes details and examples for the R6-class and functions. I’ll start explaining how a user can work with sparse matrices as the input can also be a <strong>python sparse matrix</strong>.</p>
+<p><br></p>
+</div>
+</div>
+<div id="sparse-matrices-as-input" class="section level4">
+<h4>Sparse matrices as input</h4>
+<p><br></p>
+<p>The nmslibR package includes two functions (<strong>mat_2scipy_sparse</strong> and <strong>dgCMatrix_2scipy_sparse</strong>) which allow the user to convert from a <em>matrix</em> / <em>dgCMatrix</em> to a <em>scipy sparse matrix</em>,</p>
+<p><br></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(nmslibR)
+
+<span class="co"># conversion from a matrix object to a scipy sparse matrix</span>
+<span class="co">#----------------------------------------------------------</span>
+
+<span class="kw">set.seed</span>(<span class="dv">1</span>)
+
+x =<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">runif</span>(<span class="dv">1000</span>), <span class="dt">nrow =</span> <span class="dv">100</span>, <span class="dt">ncol =</span> <span class="dv">10</span>)
+
+x_sparse =<span class="st"> </span><span class="kw">mat_2scipy_sparse</span>(x, <span class="dt">format =</span> <span class="st">&quot;sparse_row_matrix&quot;</span>)
+
+<span class="kw">print</span>(<span class="kw">dim</span>(x))
+
+[<span class="dv">1</span>] <span class="dv">100</span>  <span class="dv">10</span>
+
+<span class="kw">print</span>(x_sparse<span class="op">$</span>shape)
+
+(<span class="dv">100</span>, <span class="dv">10</span>)</code></pre></div>
+<p><br></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># conversion from a dgCMatrix object to a scipy sparse matrix</span>
+<span class="co">#-------------------------------------------------------------</span>
+
+data =<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>)
+
+<span class="co"># by default column-oriented format</span>
+
+dgcM =<span class="st"> </span>Matrix<span class="op">::</span><span class="kw">Matrix</span>(<span class="dt">data =</span> data, <span class="dt">nrow =</span> <span class="dv">3</span>,
+
+                      <span class="dt">ncol =</span> <span class="dv">3</span>, <span class="dt">byrow =</span> <span class="ot">TRUE</span>,
+
+                      <span class="dt">sparse =</span> <span class="ot">TRUE</span>)
+
+<span class="kw">print</span>(<span class="kw">dim</span>(dgcM))
+
+[<span class="dv">1</span>] <span class="dv">3</span> <span class="dv">3</span>
+
+x_sparse =<span class="st"> </span><span class="kw">dgCMatrix_2scipy_sparse</span>(dgcM)
+
+<span class="kw">print</span>(x_sparse<span class="op">$</span>shape)
+
+(<span class="dv">3</span>, <span class="dv">3</span>)</code></pre></div>
+<p><br></p>
+</div>
+<div id="the-nmslib-r6-class" class="section level4">
+<h4>The NMSlib R6-class</h4>
+<p><br></p>
+<p>The parameter settings for the <em>NMSlib</em> R6-class can be found in the <a href="https://github.com/searchivarius/nmslib/blob/master/manual/manual.pdf">Non-Metric Space Library (NMSLIB) Manual</a>, which explains the NMSLIB Library in detail. In the following code chunk, I’ll show the functionality of the methods included using a <a href="https://github.com/mlampros/DataSets">data set from my Github repository</a> (it appears as <a href="https://github.com/searchivarius/nmslib/blob/master/python_bindings/notebooks/search_sift_uint8.ipynb">.ipynb notebook in the nmslib Github repository</a>)</p>
+<p><br></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(nmslibR)
+
+
+<span class="co"># download the data from my Github repository (tested on a Linux OS)</span>
+<span class="co">#-------------------------------------------------------------------</span>
+
+<span class="kw">system</span>(<span class="st">&quot;wget https://raw.githubusercontent.com/mlampros/DataSets/master/sift_10k.txt&quot;</span>)
+
+
+<span class="co"># load the data in the R session</span>
+<span class="co">#-------------------------------</span>
+
+sift_10k =<span class="st"> </span><span class="kw">read.table</span>(<span class="st">&quot;~/sift_10k.txt&quot;</span>, <span class="dt">quote=</span><span class="st">&quot;</span><span class="ch">\&quot;</span><span class="st">&quot;</span>, <span class="dt">comment.char=</span><span class="st">&quot;&quot;</span>)
+
+
+<span class="co"># index parameters</span>
+<span class="co">#-----------------</span>
+
+M =<span class="st"> </span><span class="dv">15</span>
+efC =<span class="st"> </span><span class="dv">100</span>
+num_threads =<span class="st"> </span><span class="dv">5</span>
+
+index_params =<span class="st"> </span><span class="kw">list</span>(<span class="st">'M'</span>=<span class="st"> </span>M, <span class="st">'indexThreadQty'</span> =<span class="st"> </span>num_threads, <span class="st">'efConstruction'</span> =<span class="st"> </span>efC, 
+                    
+                    <span class="st">'post'</span> =<span class="st"> </span><span class="dv">0</span>, <span class="st">'skip_optimized_index'</span> =<span class="st"> </span><span class="dv">1</span> )
+
+
+<span class="co"># query-time parameters</span>
+<span class="co">#----------------------</span>
+
+efS =<span class="st"> </span><span class="dv">100</span>
+
+query_time_params =<span class="st"> </span><span class="kw">list</span>(<span class="st">'efSearch'</span> =<span class="st"> </span>efS)
+
+
+<span class="co"># Number of neighbors </span>
+<span class="co">#--------------------</span>
+
+K =<span class="st"> </span><span class="dv">100</span>
+
+
+<span class="co"># space to use</span>
+<span class="co">#---------------</span>
+
+space_name =<span class="st"> 'l2sqr_sift'</span>     
+
+
+<span class="co"># initialize NMSlib [ the data should be a matrix ]</span>
+<span class="co">#--------------------------------------------------</span>
+
+init_nms =<span class="st"> </span>NMSlib<span class="op">$</span><span class="kw">new</span>(<span class="dt">input_data =</span> <span class="kw">as.matrix</span>(sift_10k), <span class="dt">Index_Params =</span> index_params, 
+                      
+                      <span class="dt">Time_Params =</span> query_time_params, <span class="dt">space =</span> space_name, 
+                      
+                      <span class="dt">space_params =</span> <span class="ot">NULL</span>, <span class="dt">method =</span> <span class="st">'hnsw'</span>, 
+                      
+                      <span class="dt">data_type =</span> <span class="st">'DENSE_UINT8_VECTOR'</span>, <span class="dt">dtype =</span> <span class="st">'INT'</span>,
+                      
+                      <span class="dt">index_filepath =</span> <span class="ot">NULL</span>, <span class="dt">print_progress =</span> <span class="ot">FALSE</span>)</code></pre></div>
+<p><br></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># returns a 1-dimensional vector</span>
+<span class="co">#-------------------------------</span>
+
+init_nms<span class="op">$</span><span class="kw">Knn_Query</span>(<span class="dt">query_data_row =</span> <span class="kw">as.matrix</span>(sift_10k[<span class="dv">1</span>, ]), <span class="dt">k =</span> <span class="dv">5</span>)</code></pre></div>
+<p><br></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">[[<span class="dv">1</span>]]
+[<span class="dv">1</span>]    <span class="dv">2</span>    <span class="dv">6</span> <span class="dv">4585</span> <span class="dv">9256</span>  <span class="dv">140</span>                    <span class="co"># indices</span>
+
+[[<span class="dv">2</span>]]
+[<span class="dv">1</span>] <span class="dv">18724</span> <span class="dv">24320</span> <span class="dv">68158</span> <span class="dv">69067</span> <span class="dv">70321</span>               <span class="co"># distances</span></code></pre></div>
+<p><br></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># returns knn's for all data</span>
+<span class="co">#---------------------------</span>
+
+all_dat =<span class="st"> </span>init_nms<span class="op">$</span><span class="kw">knn_Query_Batch</span>(<span class="kw">as.matrix</span>(sift_10k), <span class="dt">k =</span> <span class="dv">5</span>, <span class="dt">num_threads =</span> <span class="dv">1</span>)
+
+<span class="kw">str</span>(all_dat)</code></pre></div>
+<p><br></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># a list of indices and distances for all observations</span>
+<span class="co">#------------------------------------------------------</span>
+
+List of <span class="dv">2</span>
+ <span class="op">$</span><span class="st"> </span>knn_idx <span class="op">:</span><span class="st"> </span>num [<span class="dv">1</span><span class="op">:</span><span class="dv">10000</span>, <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>] <span class="dv">3</span> <span class="dv">4</span> <span class="dv">1</span> <span class="dv">2</span> <span class="dv">13</span> <span class="dv">14</span> <span class="dv">1</span> <span class="dv">2</span> <span class="dv">30</span> <span class="dv">31</span> ...
+ <span class="op">$</span><span class="st"> </span>knn_dist<span class="op">:</span><span class="st"> </span>num [<span class="dv">1</span><span class="op">:</span><span class="dv">10000</span>, <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>] <span class="dv">18724</span> <span class="dv">14995</span> <span class="dv">18724</span> <span class="dv">14995</span> <span class="dv">21038</span> ...</code></pre></div>
+<p><br></p>
+<p>Details on the various methods and parameter settings can be found in the <a href="https://github.com/searchivarius/nmslib/blob/master/manual/manual.pdf">manual of the NMSLIB python Library</a>.</p>
+<p><br></p>
+</div>
+<div id="kernelknn-using-the-nmslibr-package" class="section level4">
+<h4>KernelKnn using the nmslibR package</h4>
+<p><br></p>
+<p>In the <a href="https://CRAN.R-project.org/package=KernelKnn">Vignette of the KernelKnn</a> (<em>Image classification of the MNIST and CIFAR-10 data using KernelKnn and HOG (histogram of oriented gradients)</em>) package I experimented with the <strong>mnist dataset</strong> and a cross-validated kernel k-nearest-neighbors model gave <strong>98.4 % accuracy</strong> based on <strong>HOG</strong> (histogram of oriented gradients) features. However, it took almost <strong>30 minutes</strong> (depending on the system configuration) to complete using <strong>6 threads</strong>. I’ve implemented a similar function using NMSLIB (<strong>KernelKnnCV_nmslib</strong>), so in the next code chunk I’ll use the <em>same parameter setting</em> and I’ll compare <em>computation time</em> and <em>accuracy</em>.</p>
+<p><br></p>
+<p>First load the data,</p>
+<p><br></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># using system('wget..') on a linux OS </span>
+
+<span class="kw">system</span>(<span class="st">&quot;wget https://raw.githubusercontent.com/mlampros/DataSets/master/mnist.zip&quot;</span>)             
+
+mnist &lt;-<span class="st"> </span><span class="kw">read.table</span>(<span class="kw">unz</span>(<span class="st">&quot;mnist.zip&quot;</span>, <span class="st">&quot;mnist.csv&quot;</span>), <span class="dt">nrows =</span> <span class="dv">70000</span>, <span class="dt">header =</span> T, 
+                    
+                    <span class="dt">quote =</span> <span class="st">&quot;</span><span class="ch">\&quot;</span><span class="st">&quot;</span>, <span class="dt">sep =</span> <span class="st">&quot;,&quot;</span>)</code></pre></div>
+<p><br></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">X =<span class="st"> </span>mnist[, <span class="op">-</span><span class="kw">ncol</span>(mnist)]
+<span class="kw">dim</span>(X)
+
+## [1] 70000   784
+
+<span class="co"># the 'KernelKnnCV_nmslib' function requires that the labels are numeric and start from 1 : Inf</span>
+
+y =<span class="st"> </span>mnist[, <span class="kw">ncol</span>(mnist)] <span class="op">+</span><span class="st"> </span><span class="dv">1</span>          
+<span class="kw">table</span>(y)
+
+## y
+##    1    2    3    4    5    6    7    8    9   10 
+## 6903 7877 6990 7141 6824 6313 6876 7293 6825 6958
+
+
+<span class="co"># evaluation metric</span>
+
+acc =<span class="st"> </span><span class="cf">function</span> (y_true, preds) {
+  
+  out =<span class="st"> </span><span class="kw">table</span>(y_true, <span class="kw">max.col</span>(preds, <span class="dt">ties.method =</span> <span class="st">&quot;random&quot;</span>))
+  
+  acc =<span class="st"> </span><span class="kw">sum</span>(<span class="kw">diag</span>(out))<span class="op">/</span><span class="kw">sum</span>(out)
+  
+  acc
+}</code></pre></div>
+<p><br></p>
+<p>then compute the HOG features,</p>
+<p><br></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(OpenImageR)
+
+hog =<span class="st"> </span><span class="kw">HOG_apply</span>(X, <span class="dt">cells =</span> <span class="dv">6</span>, <span class="dt">orientations =</span> <span class="dv">9</span>, <span class="dt">rows =</span> <span class="dv">28</span>, <span class="dt">columns =</span> <span class="dv">28</span>, <span class="dt">threads =</span> <span class="dv">6</span>)
+
+## 
+## time to complete : 2.101281 secs  
+
+<span class="kw">dim</span>(hog)
+
+## [1] 70000   324</code></pre></div>
+<p><br></p>
+<p>then compute the <strong>approximate</strong> kernel k-nearest-neighbors using the <strong>cosine</strong> distance,</p>
+<p><br></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># parameters for 'KernelKnnCV_nmslib'</span>
+<span class="co">#------------------------------------</span>
+
+M =<span class="st"> </span><span class="dv">30</span>
+efC =<span class="st"> </span><span class="dv">100</span>
+num_threads =<span class="st"> </span><span class="dv">6</span>
+
+index_params =<span class="st"> </span><span class="kw">list</span>(<span class="st">'M'</span>=<span class="st"> </span>M, <span class="st">'indexThreadQty'</span> =<span class="st"> </span>num_threads, <span class="st">'efConstruction'</span> =<span class="st"> </span>efC,
+                    
+                    <span class="st">'post'</span> =<span class="st"> </span><span class="dv">0</span>, <span class="st">'skip_optimized_index'</span> =<span class="st"> </span><span class="dv">1</span> )
+
+
+efS =<span class="st"> </span><span class="dv">100</span>
+
+query_time_params =<span class="st"> </span><span class="kw">list</span>(<span class="st">'efSearch'</span> =<span class="st"> </span>efS)
+
+
+<span class="co"># approximate kernel knn</span>
+<span class="co">#-----------------------</span>
+
+fit_hog =<span class="st"> </span><span class="kw">KernelKnnCV_nmslib</span>(hog, y, <span class="dt">k =</span> <span class="dv">20</span>, <span class="dt">folds =</span> <span class="dv">4</span>, <span class="dt">h =</span> <span class="dv">1</span>, 
+                             <span class="dt">weights_function =</span> <span class="st">'biweight_tricube_MULT'</span>, 
+                             <span class="dt">Levels =</span> <span class="kw">sort</span>(<span class="kw">unique</span>(y)), <span class="dt">Index_Params =</span> index_params,
+                             <span class="dt">Time_Params =</span> query_time_params, <span class="dt">space =</span> <span class="st">&quot;cosinesimil&quot;</span>, 
+                             <span class="dt">space_params =</span> <span class="ot">NULL</span>, <span class="dt">method =</span> <span class="st">&quot;hnsw&quot;</span>, <span class="dt">data_type =</span> <span class="st">&quot;DENSE_VECTOR&quot;</span>, 
+                             <span class="dt">dtype =</span> <span class="st">&quot;FLOAT&quot;</span>, <span class="dt">index_filepath =</span> <span class="ot">NULL</span>, <span class="dt">print_progress =</span> <span class="ot">FALSE</span>, 
+                             <span class="dt">num_threads =</span> <span class="dv">6</span>, <span class="dt">seed_num =</span> <span class="dv">1</span>)
+
+
+<span class="co"># cross-validation starts .. </span>
+
+<span class="co"># |=================================================================================| 100%</span>
+
+<span class="co"># time to complete : 32.88805 secs </span>
+
+
+<span class="kw">str</span>(fit_hog)</code></pre></div>
+<p><br></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">List of <span class="dv">2</span>
+ <span class="op">$</span><span class="st"> </span>preds<span class="op">:</span>List of <span class="dv">4</span>
+  ..<span class="op">$</span><span class="st"> </span><span class="er">:</span><span class="st"> </span>num [<span class="dv">1</span><span class="op">:</span><span class="dv">17500</span>, <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>] <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span> ...
+  ..<span class="op">$</span><span class="st"> </span><span class="er">:</span><span class="st"> </span>num [<span class="dv">1</span><span class="op">:</span><span class="dv">17500</span>, <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>] <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span> <span class="dv">1</span> ...
+  ..<span class="op">$</span><span class="st"> </span><span class="er">:</span><span class="st"> </span>num [<span class="dv">1</span><span class="op">:</span><span class="dv">17500</span>, <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>] <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span> ...
+  ..<span class="op">$</span><span class="st"> </span><span class="er">:</span><span class="st"> </span>num [<span class="dv">1</span><span class="op">:</span><span class="dv">17500</span>, <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>] <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span> ...
+ <span class="op">$</span><span class="st"> </span>folds<span class="op">:</span>List of <span class="dv">4</span>
+  ..<span class="op">$</span><span class="st"> </span>fold_<span class="dv">1</span><span class="op">:</span><span class="st"> </span>int [<span class="dv">1</span><span class="op">:</span><span class="dv">17500</span>] <span class="dv">49808</span> <span class="dv">21991</span> <span class="dv">42918</span> <span class="dv">7967</span> <span class="dv">49782</span> <span class="dv">28979</span> <span class="dv">64440</span> <span class="dv">49809</span> <span class="dv">30522</span> <span class="dv">36673</span> ...
+  ..<span class="op">$</span><span class="st"> </span>fold_<span class="dv">2</span><span class="op">:</span><span class="st"> </span>int [<span class="dv">1</span><span class="op">:</span><span class="dv">17500</span>] <span class="dv">51122</span> <span class="dv">9469</span> <span class="dv">58021</span> <span class="dv">45228</span> <span class="dv">2944</span> <span class="dv">58052</span> <span class="dv">65074</span> <span class="dv">17709</span> <span class="dv">2532</span> <span class="dv">31262</span> ...
+  ..<span class="op">$</span><span class="st"> </span>fold_<span class="dv">3</span><span class="op">:</span><span class="st"> </span>int [<span class="dv">1</span><span class="op">:</span><span class="dv">17500</span>] <span class="dv">33205</span> <span class="dv">40078</span> <span class="dv">68177</span> <span class="dv">32620</span> <span class="dv">52721</span> <span class="dv">18981</span> <span class="dv">19417</span> <span class="dv">53922</span> <span class="dv">19102</span> <span class="dv">67206</span> ...
+  ..<span class="op">$</span><span class="st"> </span>fold_<span class="dv">4</span><span class="op">:</span><span class="st"> </span>int [<span class="dv">1</span><span class="op">:</span><span class="dv">17500</span>] <span class="dv">28267</span> <span class="dv">41652</span> <span class="dv">28514</span> <span class="dv">34525</span> <span class="dv">68534</span> <span class="dv">13294</span> <span class="dv">48759</span> <span class="dv">47521</span> <span class="dv">69395</span> <span class="dv">41408</span> ...</code></pre></div>
+<p><br></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">acc_fit_hog =<span class="st"> </span><span class="kw">unlist</span>(<span class="kw">lapply</span>(<span class="dv">1</span><span class="op">:</span><span class="kw">length</span>(fit_hog<span class="op">$</span>preds), 
+                            
+                            <span class="cf">function</span>(x) <span class="kw">acc</span>(y[fit_hog<span class="op">$</span>folds[[x]]], 
+                                            
+                                            fit_hog<span class="op">$</span>preds[[x]])))
+acc_fit_hog
+
+## [1] 0.9768000 0.9786857 0.9763429 0.9760000
+
+<span class="kw">cat</span>(<span class="st">'mean accuracy for hog-features using cross-validation :'</span>, <span class="kw">mean</span>(acc_fit_hog), <span class="st">'</span><span class="ch">\n</span><span class="st">'</span>)
+
+## mean accuracy for hog-features using cross-validation : 0.9769571</code></pre></div>
+<p><br></p>
+<p>It took approx. <strong>33 seconds</strong> to return with an accuracy of <strong>97.7 %</strong> . Almost <strong>47 times faster</strong> than KernelKnn’s corresponding function (brute force) with a <strong>slight lower accuracy</strong> rate (the <em>braycurtis</em> distance metric might be better suited for this dataset).</p>
+<p>I also run the corresponding brute-force algorithm of the NMSLIB Library by setting the <em>method</em> parameter to <strong>seq_search</strong>,</p>
+<p><br></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># brute force of NMSLIB   [ here we set 'Index_Params' and 'Time_Params' to NULL ]</span>
+<span class="co">#----------------------</span>
+
+fit_hog_seq =<span class="st"> </span><span class="kw">KernelKnnCV_nmslib</span>(hog, y, <span class="dt">k =</span> <span class="dv">20</span>, <span class="dt">folds =</span> <span class="dv">4</span>, <span class="dt">h =</span> <span class="dv">1</span>, 
+                                <span class="dt">weights_function =</span> <span class="st">'biweight_tricube_MULT'</span>, 
+                                <span class="dt">Levels =</span> <span class="kw">sort</span>(<span class="kw">unique</span>(y)), <span class="dt">Index_Params =</span> <span class="ot">NULL</span>,
+                                <span class="dt">Time_Params =</span> <span class="ot">NULL</span>, <span class="dt">space =</span> <span class="st">&quot;cosinesimil&quot;</span>, 
+                                <span class="dt">space_params =</span> <span class="ot">NULL</span>, <span class="dt">method =</span> <span class="st">&quot;seq_search&quot;</span>, 
+                                <span class="dt">data_type =</span> <span class="st">&quot;DENSE_VECTOR&quot;</span>, <span class="dt">dtype =</span> <span class="st">&quot;FLOAT&quot;</span>, 
+                                <span class="dt">index_filepath =</span> <span class="ot">NULL</span>, <span class="dt">print_progress =</span> <span class="ot">FALSE</span>, 
+                                <span class="dt">num_threads =</span> <span class="dv">6</span>, <span class="dt">seed_num =</span> <span class="dv">1</span>)
+
+
+<span class="co"># cross-validation starts .. </span>
+
+<span class="co"># |=================================================================================| 100%</span>
+
+<span class="co"># time to complete : 4.506177 mins  </span>
+
+
+acc_fit_hog_seq =<span class="st"> </span><span class="kw">unlist</span>(<span class="kw">lapply</span>(<span class="dv">1</span><span class="op">:</span><span class="kw">length</span>(fit_hog_seq<span class="op">$</span>preds), 
+                                
+                                <span class="cf">function</span>(x) <span class="kw">acc</span>(y[fit_hog_seq<span class="op">$</span>folds[[x]]], 
+                                                
+                                                fit_hog_seq<span class="op">$</span>preds[[x]])))
+acc_fit_hog_seq
+
+## [1] 0.9785143 0.9802286 0.9783429 0.9784571
+
+<span class="kw">cat</span>(<span class="st">'mean accuracy for hog-features using cross-validation :'</span>, <span class="kw">mean</span>(acc_fit_hog_seq), <span class="st">'</span><span class="ch">\n</span><span class="st">'</span>)
+
+## mean accuracy for hog-features using cross-validation : 0.9788857</code></pre></div>
+<p><br></p>
+<p>The brute-force algorithm of the NMSLIB Library is almost <strong>6 times faster</strong> than KernelKnn giving an accuracy of approx. <strong>97.9 %</strong>.</p>
+</div>
+
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
