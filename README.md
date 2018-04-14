@@ -1,4 +1,5 @@
 
+
 ## nmslibR (Non Metric Space Library in R)
 <br>
 
@@ -256,3 +257,20 @@ install.packages('nmslibR')
 
 ```
 <br>
+
+and to download the latest version from Github use the *install_github* function of the devtools package,
+<br><br>
+
+```R
+
+devtools::install_github(repo = 'mlampros/nmslibR')
+
+```
+<br>
+Use the following link to report bugs/issues,
+<br><br>
+
+[https://github.com/mlampros/nmslibR/issues](https://github.com/mlampros/nmslibR/issues)
+
+<br>
+
