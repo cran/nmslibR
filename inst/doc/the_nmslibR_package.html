@@ -12,7 +12,7 @@
 
 <meta name="author" content="Lampros Mouselimis" />
 
-<meta name="date" content="2018-04-14" />
+<meta name="date" content="2018-05-10" />
 
 <title>Non Metric Space ( Approximate ) Library in R</title>
 
@@ -70,7 +70,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">Non Metric Space ( Approximate ) Library in R</h1>
 <h4 class="author"><em>Lampros Mouselimis</em></h4>
-<h4 class="date"><em>2018-04-14</em></h4>
+<h4 class="date"><em>2018-05-10</em></h4>
 
 
 
@@ -119,6 +119,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </div>
 <div id="functions" class="section level5">
 <h5><strong>functions</strong></h5>
+<p><strong>UPDATE 10-05-2018</strong> : Beginning from version <strong>1.0.2</strong> the <strong>dgCMatrix_2scipy_sparse</strong> function was renamed to <strong>TO_scipy_sparse</strong> and now accepts either a <em>dgCMatrix</em> or a <em>dgRMatrix</em> as input. The appropriate format for the nmslibR package in case of sparse matrices is the <strong>dgRMatrix</strong> format (<em>scipy.sparse.csr_matrix</em>)</p>
 <p><br></p>
 <table>
 <thead>
@@ -141,7 +142,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <table>
 <thead>
 <tr class="header">
-<th align="left">dgCMatrix_2scipy_sparse()</th>
+<th align="left">TO_scipy_sparse()</th>
 </tr>
 </thead>
 <tbody>
@@ -164,7 +165,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div id="sparse-matrices-as-input" class="section level4">
 <h4>Sparse matrices as input</h4>
 <p><br></p>
-<p>The nmslibR package includes two functions (<strong>mat_2scipy_sparse</strong> and <strong>dgCMatrix_2scipy_sparse</strong>) which allow the user to convert from a <em>matrix</em> / <em>dgCMatrix</em> to a <em>scipy sparse matrix</em>,</p>
+<p>The nmslibR package includes two functions (<strong>mat_2scipy_sparse</strong> and <strong>TO_scipy_sparse</strong>) which allow the user to convert from a <em>matrix</em> / <em>sparse matrix</em> (<em>dgCMatrix</em>, <em>dgRMatrix</em>) to a <em>scipy sparse matrix</em> (<em>scipy.sparse.csc_matrix</em>, <em>scipy.sparse.csr_matrix</em>),</p>
 <p><br></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(nmslibR)
 
@@ -190,7 +191,9 @@ x_sparse =<span class="st"> </span><span class="kw">mat_2scipy_sparse</span>(x, 
 
 data =<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>)
 
-<span class="co"># by default column-oriented format</span>
+
+<span class="co"># 'dgCMatrix' sparse matrix</span>
+<span class="co">#--------------------------</span>
 
 dgcM =<span class="st"> </span>Matrix<span class="op">::</span><span class="kw">Matrix</span>(<span class="dt">data =</span> data, <span class="dt">nrow =</span> <span class="dv">3</span>,
 
@@ -202,9 +205,31 @@ dgcM =<span class="st"> </span>Matrix<span class="op">::</span><span class="kw">
 
 [<span class="dv">1</span>] <span class="dv">3</span> <span class="dv">3</span>
 
-x_sparse =<span class="st"> </span><span class="kw">dgCMatrix_2scipy_sparse</span>(dgcM)
+x_sparse =<span class="st"> </span><span class="kw">TO_scipy_sparse</span>(dgcM)
 
 <span class="kw">print</span>(x_sparse<span class="op">$</span>shape)
+
+(<span class="dv">3</span>, <span class="dv">3</span>)
+
+
+<span class="co"># 'dgRMatrix' sparse matrix</span>
+<span class="co">#--------------------------</span>
+
+dgrM =<span class="st"> </span><span class="kw">as</span>(dgcM, <span class="st">&quot;RsparseMatrix&quot;</span>)
+
+<span class="kw">class</span>(dgrM)
+
+<span class="co"># [1] &quot;dgRMatrix&quot;</span>
+<span class="co"># attr(,&quot;package&quot;)</span>
+<span class="co"># [1] &quot;Matrix&quot;</span>
+
+<span class="kw">print</span>(<span class="kw">dim</span>(dgrM))
+
+[<span class="dv">1</span>] <span class="dv">3</span> <span class="dv">3</span>
+
+res_dgr =<span class="st"> </span><span class="kw">TO_scipy_sparse</span>(dgrM)
+
+<span class="kw">print</span>(res_dgr<span class="op">$</span>shape)
 
 (<span class="dv">3</span>, <span class="dv">3</span>)</code></pre></div>
 <p><br></p>

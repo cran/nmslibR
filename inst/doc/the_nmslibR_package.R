@@ -27,7 +27,9 @@
 #  
 #  data = c(1, 0, 2, 0, 0, 3, 4, 5, 6)
 #  
-#  # by default column-oriented format
+#  
+#  # 'dgCMatrix' sparse matrix
+#  #--------------------------
 #  
 #  dgcM = Matrix::Matrix(data = data, nrow = 3,
 #  
@@ -39,9 +41,31 @@
 #  
 #  [1] 3 3
 #  
-#  x_sparse = dgCMatrix_2scipy_sparse(dgcM)
+#  x_sparse = TO_scipy_sparse(dgcM)
 #  
 #  print(x_sparse$shape)
+#  
+#  (3, 3)
+#  
+#  
+#  # 'dgRMatrix' sparse matrix
+#  #--------------------------
+#  
+#  dgrM = as(dgcM, "RsparseMatrix")
+#  
+#  class(dgrM)
+#  
+#  # [1] "dgRMatrix"
+#  # attr(,"package")
+#  # [1] "Matrix"
+#  
+#  print(dim(dgrM))
+#  
+#  [1] 3 3
+#  
+#  res_dgr = TO_scipy_sparse(dgrM)
+#  
+#  print(res_dgr$shape)
 #  
 #  (3, 3)
 #  
