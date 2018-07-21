@@ -1,8 +1,8 @@
 Package: nmslibR
 Type: Package
 Title: Non Metric Space (Approximate) Library
-Version: 1.0.2
-Date: 2018-05-10
+Version: 1.0.3
+Date: 2018-07-21
 Authors@R: c( person("Lampros", "Mouselimis", email = "mouselimislampros@gmail.com", role = c("aut", "cre")), person("B.", "Naidan", role = "cph", comment = "Author of the Non-Metric Space Library (NMSLIB)"), person("L.", "Boytsov", role = "cph", comment = "Author of the Non-Metric Space Library (NMSLIB)"), person("Yu.", "Malkov", role = "cph", comment = "Author of the Non-Metric Space Library (NMSLIB)"), person("B.", "Frederickson", role = "cph", comment = "Author of the Non-Metric Space Library (NMSLIB)"), person("D.", "Novak", role = "cph", comment = "Author of the Non-Metric Space Library (NMSLIB)") )
 Maintainer: Lampros Mouselimis <mouselimislampros@gmail.com>
 BugReports: https://github.com/mlampros/nmslibR/issues
@@ -22,7 +22,7 @@ RoxygenNote: 6.0.1
 Suggests: testthat, covr, knitr, rmarkdown
 VignetteBuilder: knitr
 NeedsCompilation: yes
-Packaged: 2018-05-10 10:54:03 UTC; lampros
+Packaged: 2018-07-21 18:27:11 UTC; lampros
 Author: Lampros Mouselimis [aut, cre],
   B. Naidan [cph] (Author of the Non-Metric Space Library (NMSLIB)),
   L. Boytsov [cph] (Author of the Non-Metric Space Library (NMSLIB)),
@@ -30,4 +30,4 @@ Author: Lampros Mouselimis [aut, cre],
   B. Frederickson [cph] (Author of the Non-Metric Space Library (NMSLIB)),
   D. Novak [cph] (Author of the Non-Metric Space Library (NMSLIB))
 Repository: CRAN
-Date/Publication: 2018-05-10 11:15:21 UTC
+Date/Publication: 2018-07-21 19:00:03 UTC
