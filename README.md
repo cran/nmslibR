@@ -4,16 +4,19 @@
 <br>
 
 
-The **nmslibR** package is a wrapper of the [Non-Metric Space Library (NMSLIB)](https://github.com/searchivarius/nmslib) *python* package. More details on the functionality of the *nmslibR* package can be found in the package Documentation and Vignette.
+The **nmslibR** package is a wrapper of the [Non-Metric Space Library (NMSLIB)](https://github.com/nmslib/nmslib) *python* package. More details on the functionality of the *nmslibR* package can be found in the [blog-post](http://mlampros.github.io/2018/02/27/the_nmslibR_package/) and in the package Documentation.
 
+<br>
+
+**UPDATE 26-07-2018**: A [Singularity image file](http://mlampros.github.io/2018/07/26/singularity_containers/) is available in case that someone intends to run *nmslibR* on Ubuntu Linux (locally or in a cloud instance) with all package requirements pre-installed. This allows the user to utilize the *nmslibR* package without having to spend time on the installation process.
 
 <br>
 
 **Reference:**
 
-https://github.com/searchivarius/nmslib
+https://github.com/nmslib/nmslib
 
-https://github.com/searchivarius/nmslib/blob/master/manual/manual.pdf
+https://github.com/nmslib/nmslib/blob/master/manual/latex/manual.pdf
 
 
 <br>
@@ -260,12 +263,12 @@ install.packages('nmslibR')
 ```
 <br>
 
-and to download the latest version from Github use the *install_github* function of the devtools package,
+and to download the latest version from Github use the *install_github* function of the *remotes* package,
 <br><br>
 
 ```R
 
-devtools::install_github(repo = 'mlampros/nmslibR')
+remotes::install_github(repo = 'mlampros/nmslibR')
 
 ```
 <br>

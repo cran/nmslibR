@@ -4,11 +4,25 @@
 \alias{KernelKnn_nmslib}
 \title{Approximate Kernel k nearest neighbors using the nmslib library}
 \usage{
-KernelKnn_nmslib(data, TEST_data = NULL, y, k = 5, h = 1,
-  weights_function = NULL, Levels = NULL, Index_Params = NULL,
-  Time_Params = NULL, space = "l1", space_params = NULL,
-  method = "hnsw", data_type = "DENSE_VECTOR", dtype = "FLOAT",
-  index_filepath = NULL, print_progress = FALSE, num_threads = 1)
+KernelKnn_nmslib(
+  data,
+  TEST_data = NULL,
+  y,
+  k = 5,
+  h = 1,
+  weights_function = NULL,
+  Levels = NULL,
+  Index_Params = NULL,
+  Time_Params = NULL,
+  space = "l1",
+  space_params = NULL,
+  method = "hnsw",
+  data_type = "DENSE_VECTOR",
+  dtype = "FLOAT",
+  index_filepath = NULL,
+  print_progress = FALSE,
+  num_threads = 1
+)
 }
 \arguments{
 \item{data}{either a matrix or a scipy sparse matrix}
@@ -37,7 +51,7 @@ KernelKnn_nmslib(data, TEST_data = NULL, y, k = 5, h = 1,
 
 \item{data_type}{a character string. One of 'DENSE_UINT8_VECTOR', 'DENSE_VECTOR', 'OBJECT_AS_STRING' or 'SPARSE_VECTOR'}
 
-\item{dtype}{a character string. One of 'DOUBLE', 'FLOAT', 'INT'}
+\item{dtype}{a character string. Either 'FLOAT' or 'INT'}
 
 \item{index_filepath}{a character string specifying the path to a file, where an existing index is saved}
 
