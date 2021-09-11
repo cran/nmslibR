@@ -12,26 +12,11 @@
 
 <meta name="author" content="Lampros Mouselimis" />
 
-<meta name="date" content="2021-05-07" />
+<meta name="date" content="2021-09-11" />
 
 <title>Non Metric Space ( Approximate ) Library in R</title>
 
-<script>// Hide empty <a> tag within highlighted CodeBlock for screen reader accessibility (see https://github.com/jgm/pandoc/issues/6352#issuecomment-626106786) -->
-// v0.0.1
-// Written by JooYoung Seo (jooyoung@psu.edu) and Atsushi Yasumoto on June 1st, 2020.
-
-document.addEventListener('DOMContentLoaded', function() {
-  const codeList = document.getElementsByClassName("sourceCode");
-  for (var i = 0; i < codeList.length; i++) {
-    var linkList = codeList[i].getElementsByTagName('a');
-    for (var j = 0; j < linkList.length; j++) {
-      if (linkList[j].innerHTML === "") {
-        linkList[j].setAttribute('aria-hidden', 'true');
-      }
-    }
-  }
-});
-</script>
+<script src="data:application/javascript;base64,Ly8gUGFuZG9jIDIuOSBhZGRzIGF0dHJpYnV0ZXMgb24gYm90aCBoZWFkZXIgYW5kIGRpdi4gV2UgcmVtb3ZlIHRoZSBmb3JtZXIgKHRvCi8vIGJlIGNvbXBhdGlibGUgd2l0aCB0aGUgYmVoYXZpb3Igb2YgUGFuZG9jIDwgMi44KS4KZG9jdW1lbnQuYWRkRXZlbnRMaXN0ZW5lcignRE9NQ29udGVudExvYWRlZCcsIGZ1bmN0aW9uKGUpIHsKICB2YXIgaHMgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yQWxsKCJkaXYuc2VjdGlvbltjbGFzcyo9J2xldmVsJ10gPiA6Zmlyc3QtY2hpbGQiKTsKICB2YXIgaSwgaCwgYTsKICBmb3IgKGkgPSAwOyBpIDwgaHMubGVuZ3RoOyBpKyspIHsKICAgIGggPSBoc1tpXTsKICAgIGlmICghL15oWzEtNl0kL2kudGVzdChoLnRhZ05hbWUpKSBjb250aW51ZTsgIC8vIGl0IHNob3VsZCBiZSBhIGhlYWRlciBoMS1oNgogICAgYSA9IGguYXR0cmlidXRlczsKICAgIHdoaWxlIChhLmxlbmd0aCA+IDApIGgucmVtb3ZlQXR0cmlidXRlKGFbMF0ubmFtZSk7CiAgfQp9KTsK"></script>
 
 <style type="text/css">
   code{white-space: pre-wrap;}
@@ -43,21 +28,28 @@ document.addEventListener('DOMContentLoaded', function() {
     </style>
 
 
-<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
 <style type="text/css" data-origin="pandoc">
-code.sourceCode > span { display: inline-block; line-height: 1.25; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-code.sourceCode > span:empty { height: 1.2em; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
 div.sourceCode { margin: 1em 0; }
 pre.sourceCode { margin: 0; }
 @media screen {
 div.sourceCode { overflow: auto; }
 }
 @media print {
-code.sourceCode { white-space: pre-wrap; }
-code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -77,7 +69,7 @@ pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-le
 div.sourceCode
   {   }
 @media screen {
-code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -135,187 +127,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 
 
-<style type="text/css">body {
-background-color: #fff;
-margin: 1em auto;
-max-width: 700px;
-overflow: visible;
-padding-left: 2em;
-padding-right: 2em;
-font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
-font-size: 14px;
-line-height: 1.35;
-}
-#TOC {
-clear: both;
-margin: 0 0 10px 10px;
-padding: 4px;
-width: 400px;
-border: 1px solid #CCCCCC;
-border-radius: 5px;
-background-color: #f6f6f6;
-font-size: 13px;
-line-height: 1.3;
-}
-#TOC .toctitle {
-font-weight: bold;
-font-size: 15px;
-margin-left: 5px;
-}
-#TOC ul {
-padding-left: 40px;
-margin-left: -1.5em;
-margin-top: 5px;
-margin-bottom: 5px;
-}
-#TOC ul ul {
-margin-left: -2em;
-}
-#TOC li {
-line-height: 16px;
-}
-table {
-margin: 1em auto;
-border-width: 1px;
-border-color: #DDDDDD;
-border-style: outset;
-border-collapse: collapse;
-}
-table th {
-border-width: 2px;
-padding: 5px;
-border-style: inset;
-}
-table td {
-border-width: 1px;
-border-style: inset;
-line-height: 18px;
-padding: 5px 5px;
-}
-table, table th, table td {
-border-left-style: none;
-border-right-style: none;
-}
-table thead, table tr.even {
-background-color: #f7f7f7;
-}
-p {
-margin: 0.5em 0;
-}
-blockquote {
-background-color: #f6f6f6;
-padding: 0.25em 0.75em;
-}
-hr {
-border-style: solid;
-border: none;
-border-top: 1px solid #777;
-margin: 28px 0;
-}
-dl {
-margin-left: 0;
-}
-dl dd {
-margin-bottom: 13px;
-margin-left: 13px;
-}
-dl dt {
-font-weight: bold;
-}
-ul {
-margin-top: 0;
-}
-ul li {
-list-style: circle outside;
-}
-ul ul {
-margin-bottom: 0;
-}
-pre, code {
-background-color: #f7f7f7;
-border-radius: 3px;
-color: #333;
-white-space: pre-wrap; 
-}
-pre {
-border-radius: 3px;
-margin: 5px 0px 10px 0px;
-padding: 10px;
-}
-pre:not([class]) {
-background-color: #f7f7f7;
-}
-code {
-font-family: Consolas, Monaco, 'Courier New', monospace;
-font-size: 85%;
-}
-p > code, li > code {
-padding: 2px 0px;
-}
-div.figure {
-text-align: center;
-}
-img {
-background-color: #FFFFFF;
-padding: 2px;
-border: 1px solid #DDDDDD;
-border-radius: 3px;
-border: 1px solid #CCCCCC;
-margin: 0 5px;
-}
-h1 {
-margin-top: 0;
-font-size: 35px;
-line-height: 40px;
-}
-h2 {
-border-bottom: 4px solid #f7f7f7;
-padding-top: 10px;
-padding-bottom: 2px;
-font-size: 145%;
-}
-h3 {
-border-bottom: 2px solid #f7f7f7;
-padding-top: 10px;
-font-size: 120%;
-}
-h4 {
-border-bottom: 1px solid #f7f7f7;
-margin-left: 8px;
-font-size: 105%;
-}
-h5, h6 {
-border-bottom: 1px solid #ccc;
-font-size: 105%;
-}
-a {
-color: #0033dd;
-text-decoration: none;
-}
-a:hover {
-color: #6666ff; }
-a:visited {
-color: #800080; }
-a:visited:hover {
-color: #BB00BB; }
-a[href^="http:"] {
-text-decoration: underline; }
-a[href^="https:"] {
-text-decoration: underline; }
-
-code > span.kw { color: #555; font-weight: bold; } 
-code > span.dt { color: #902000; } 
-code > span.dv { color: #40a070; } 
-code > span.bn { color: #d14; } 
-code > span.fl { color: #d14; } 
-code > span.ch { color: #d14; } 
-code > span.st { color: #d14; } 
-code > span.co { color: #888888; font-style: italic; } 
-code > span.ot { color: #007020; } 
-code > span.al { color: #ff0000; font-weight: bold; } 
-code > span.fu { color: #900; font-weight: bold; } 
-code > span.er { color: #a61717; background-color: #e3d2d2; } 
-</style>
+<link rel="stylesheet" href="data:text/css,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" type="text/css" />
 
 
 
@@ -329,7 +141,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 <h1 class="title toc-ignore">Non Metric Space ( Approximate ) Library in R</h1>
 <h4 class="author">Lampros Mouselimis</h4>
-<h4 class="date">2021-05-07</h4>
+<h4 class="date">2021-09-11</h4>
 
 
 
@@ -426,71 +238,71 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <p><br></p>
 <p>The nmslibR package includes two functions (<strong>mat_2scipy_sparse</strong> and <strong>TO_scipy_sparse</strong>) which allow the user to convert from a <em>matrix</em> / <em>sparse matrix</em> (<em>dgCMatrix</em>, <em>dgRMatrix</em>) to a <em>scipy sparse matrix</em> (<em>scipy.sparse.csc_matrix</em>, <em>scipy.sparse.csr_matrix</em>),</p>
 <p><br></p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">library</span>(nmslibR)</span>
-<span id="cb1-2"><a href="#cb1-2"></a></span>
-<span id="cb1-3"><a href="#cb1-3"></a><span class="co"># conversion from a matrix object to a scipy sparse matrix</span></span>
-<span id="cb1-4"><a href="#cb1-4"></a><span class="co">#----------------------------------------------------------</span></span>
-<span id="cb1-5"><a href="#cb1-5"></a></span>
-<span id="cb1-6"><a href="#cb1-6"></a><span class="kw">set.seed</span>(<span class="dv">1</span>)</span>
-<span id="cb1-7"><a href="#cb1-7"></a></span>
-<span id="cb1-8"><a href="#cb1-8"></a>x =<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">runif</span>(<span class="dv">1000</span>), <span class="dt">nrow =</span> <span class="dv">100</span>, <span class="dt">ncol =</span> <span class="dv">10</span>)</span>
-<span id="cb1-9"><a href="#cb1-9"></a></span>
-<span id="cb1-10"><a href="#cb1-10"></a>x_sparse =<span class="st"> </span><span class="kw">mat_2scipy_sparse</span>(x, <span class="dt">format =</span> <span class="st">&quot;sparse_row_matrix&quot;</span>)</span>
-<span id="cb1-11"><a href="#cb1-11"></a></span>
-<span id="cb1-12"><a href="#cb1-12"></a><span class="kw">print</span>(<span class="kw">dim</span>(x))</span>
-<span id="cb1-13"><a href="#cb1-13"></a></span>
-<span id="cb1-14"><a href="#cb1-14"></a>[<span class="dv">1</span>] <span class="dv">100</span>  <span class="dv">10</span></span>
-<span id="cb1-15"><a href="#cb1-15"></a></span>
-<span id="cb1-16"><a href="#cb1-16"></a><span class="kw">print</span>(x_sparse<span class="op">$</span>shape)</span>
-<span id="cb1-17"><a href="#cb1-17"></a></span>
-<span id="cb1-18"><a href="#cb1-18"></a>(<span class="dv">100</span>, <span class="dv">10</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(nmslibR)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># conversion from a matrix object to a scipy sparse matrix</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co">#----------------------------------------------------------</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>x <span class="ot">=</span> <span class="fu">matrix</span>(<span class="fu">runif</span>(<span class="dv">1000</span>), <span class="at">nrow =</span> <span class="dv">100</span>, <span class="at">ncol =</span> <span class="dv">10</span>)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>x_sparse <span class="ot">=</span> <span class="fu">mat_2scipy_sparse</span>(x, <span class="at">format =</span> <span class="st">&quot;sparse_row_matrix&quot;</span>)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">dim</span>(x))</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>[<span class="dv">1</span>] <span class="dv">100</span>  <span class="dv">10</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(x_sparse<span class="sc">$</span>shape)</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>(<span class="dv">100</span>, <span class="dv">10</span>)</span></code></pre></div>
 <p><br></p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="co"># conversion from a dgCMatrix object to a scipy sparse matrix</span></span>
-<span id="cb2-2"><a href="#cb2-2"></a><span class="co">#-------------------------------------------------------------</span></span>
-<span id="cb2-3"><a href="#cb2-3"></a></span>
-<span id="cb2-4"><a href="#cb2-4"></a>data =<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>)</span>
-<span id="cb2-5"><a href="#cb2-5"></a></span>
-<span id="cb2-6"><a href="#cb2-6"></a></span>
-<span id="cb2-7"><a href="#cb2-7"></a><span class="co"># &#39;dgCMatrix&#39; sparse matrix</span></span>
-<span id="cb2-8"><a href="#cb2-8"></a><span class="co">#--------------------------</span></span>
-<span id="cb2-9"><a href="#cb2-9"></a></span>
-<span id="cb2-10"><a href="#cb2-10"></a>dgcM =<span class="st"> </span>Matrix<span class="op">::</span><span class="kw">Matrix</span>(<span class="dt">data =</span> data, <span class="dt">nrow =</span> <span class="dv">3</span>,</span>
-<span id="cb2-11"><a href="#cb2-11"></a></span>
-<span id="cb2-12"><a href="#cb2-12"></a>                      <span class="dt">ncol =</span> <span class="dv">3</span>, <span class="dt">byrow =</span> <span class="ot">TRUE</span>,</span>
-<span id="cb2-13"><a href="#cb2-13"></a></span>
-<span id="cb2-14"><a href="#cb2-14"></a>                      <span class="dt">sparse =</span> <span class="ot">TRUE</span>)</span>
-<span id="cb2-15"><a href="#cb2-15"></a></span>
-<span id="cb2-16"><a href="#cb2-16"></a><span class="kw">print</span>(<span class="kw">dim</span>(dgcM))</span>
-<span id="cb2-17"><a href="#cb2-17"></a></span>
-<span id="cb2-18"><a href="#cb2-18"></a>[<span class="dv">1</span>] <span class="dv">3</span> <span class="dv">3</span></span>
-<span id="cb2-19"><a href="#cb2-19"></a></span>
-<span id="cb2-20"><a href="#cb2-20"></a>x_sparse =<span class="st"> </span><span class="kw">TO_scipy_sparse</span>(dgcM)</span>
-<span id="cb2-21"><a href="#cb2-21"></a></span>
-<span id="cb2-22"><a href="#cb2-22"></a><span class="kw">print</span>(x_sparse<span class="op">$</span>shape)</span>
-<span id="cb2-23"><a href="#cb2-23"></a></span>
-<span id="cb2-24"><a href="#cb2-24"></a>(<span class="dv">3</span>, <span class="dv">3</span>)</span>
-<span id="cb2-25"><a href="#cb2-25"></a></span>
-<span id="cb2-26"><a href="#cb2-26"></a></span>
-<span id="cb2-27"><a href="#cb2-27"></a><span class="co"># &#39;dgRMatrix&#39; sparse matrix</span></span>
-<span id="cb2-28"><a href="#cb2-28"></a><span class="co">#--------------------------</span></span>
-<span id="cb2-29"><a href="#cb2-29"></a></span>
-<span id="cb2-30"><a href="#cb2-30"></a>dgrM =<span class="st"> </span><span class="kw">as</span>(dgcM, <span class="st">&quot;RsparseMatrix&quot;</span>)</span>
-<span id="cb2-31"><a href="#cb2-31"></a></span>
-<span id="cb2-32"><a href="#cb2-32"></a><span class="kw">class</span>(dgrM)</span>
-<span id="cb2-33"><a href="#cb2-33"></a></span>
-<span id="cb2-34"><a href="#cb2-34"></a><span class="co"># [1] &quot;dgRMatrix&quot;</span></span>
-<span id="cb2-35"><a href="#cb2-35"></a><span class="co"># attr(,&quot;package&quot;)</span></span>
-<span id="cb2-36"><a href="#cb2-36"></a><span class="co"># [1] &quot;Matrix&quot;</span></span>
-<span id="cb2-37"><a href="#cb2-37"></a></span>
-<span id="cb2-38"><a href="#cb2-38"></a><span class="kw">print</span>(<span class="kw">dim</span>(dgrM))</span>
-<span id="cb2-39"><a href="#cb2-39"></a></span>
-<span id="cb2-40"><a href="#cb2-40"></a>[<span class="dv">1</span>] <span class="dv">3</span> <span class="dv">3</span></span>
-<span id="cb2-41"><a href="#cb2-41"></a></span>
-<span id="cb2-42"><a href="#cb2-42"></a>res_dgr =<span class="st"> </span><span class="kw">TO_scipy_sparse</span>(dgrM)</span>
-<span id="cb2-43"><a href="#cb2-43"></a></span>
-<span id="cb2-44"><a href="#cb2-44"></a><span class="kw">print</span>(res_dgr<span class="op">$</span>shape)</span>
-<span id="cb2-45"><a href="#cb2-45"></a></span>
-<span id="cb2-46"><a href="#cb2-46"></a>(<span class="dv">3</span>, <span class="dv">3</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># conversion from a dgCMatrix object to a scipy sparse matrix</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co">#-------------------------------------------------------------</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>data <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co"># &#39;dgCMatrix&#39; sparse matrix</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co">#--------------------------</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>dgcM <span class="ot">=</span> Matrix<span class="sc">::</span><span class="fu">Matrix</span>(<span class="at">data =</span> data, <span class="at">nrow =</span> <span class="dv">3</span>,</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>                      <span class="at">ncol =</span> <span class="dv">3</span>, <span class="at">byrow =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>                      <span class="at">sparse =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">dim</span>(dgcM))</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>[<span class="dv">1</span>] <span class="dv">3</span> <span class="dv">3</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>x_sparse <span class="ot">=</span> <span class="fu">TO_scipy_sparse</span>(dgcM)</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(x_sparse<span class="sc">$</span>shape)</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>(<span class="dv">3</span>, <span class="dv">3</span>)</span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a><span class="co"># &#39;dgRMatrix&#39; sparse matrix</span></span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a><span class="co">#--------------------------</span></span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>dgrM <span class="ot">=</span> <span class="fu">as</span>(dgcM, <span class="st">&quot;RsparseMatrix&quot;</span>)</span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(dgrM)</span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a><span class="co"># [1] &quot;dgRMatrix&quot;</span></span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a><span class="co"># attr(,&quot;package&quot;)</span></span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a><span class="co"># [1] &quot;Matrix&quot;</span></span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">dim</span>(dgrM))</span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a>[<span class="dv">1</span>] <span class="dv">3</span> <span class="dv">3</span></span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a>res_dgr <span class="ot">=</span> <span class="fu">TO_scipy_sparse</span>(dgrM)</span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(res_dgr<span class="sc">$</span>shape)</span>
+<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a>(<span class="dv">3</span>, <span class="dv">3</span>)</span></code></pre></div>
 <p><br></p>
 </div>
 <div id="the-nmslib-r6-class" class="section level4">
@@ -498,90 +310,90 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <p><br></p>
 <p>The parameter settings for the <em>NMSlib</em> R6-class can be found in the <a href="https://github.com/nmslib/nmslib/blob/master/manual/latex/manual.pdf">Non-Metric Space Library (NMSLIB) Manual</a>, which explains the NMSLIB Library in detail. In the following code chunk, I’ll show the functionality of the methods included using a <a href="https://github.com/mlampros/DataSets">data set from my Github repository</a> (it appears as <a href="https://github.com/nmslib/nmslib/blob/master/python_bindings/notebooks/search_sift_uint8.ipynb">.ipynb notebook in the nmslib Github repository</a>)</p>
 <p><br></p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw">library</span>(nmslibR)</span>
-<span id="cb3-2"><a href="#cb3-2"></a></span>
-<span id="cb3-3"><a href="#cb3-3"></a></span>
-<span id="cb3-4"><a href="#cb3-4"></a><span class="co"># download the data from my Github repository (tested on a Linux OS)</span></span>
-<span id="cb3-5"><a href="#cb3-5"></a><span class="co">#-------------------------------------------------------------------</span></span>
-<span id="cb3-6"><a href="#cb3-6"></a></span>
-<span id="cb3-7"><a href="#cb3-7"></a><span class="kw">system</span>(<span class="st">&quot;wget https://raw.githubusercontent.com/mlampros/DataSets/master/sift_10k.txt&quot;</span>)</span>
-<span id="cb3-8"><a href="#cb3-8"></a></span>
-<span id="cb3-9"><a href="#cb3-9"></a></span>
-<span id="cb3-10"><a href="#cb3-10"></a><span class="co"># load the data in the R session</span></span>
-<span id="cb3-11"><a href="#cb3-11"></a><span class="co">#-------------------------------</span></span>
-<span id="cb3-12"><a href="#cb3-12"></a></span>
-<span id="cb3-13"><a href="#cb3-13"></a>sift_10k =<span class="st"> </span><span class="kw">read.table</span>(<span class="st">&quot;~/sift_10k.txt&quot;</span>, <span class="dt">quote=</span><span class="st">&quot;</span><span class="ch">\&quot;</span><span class="st">&quot;</span>, <span class="dt">comment.char=</span><span class="st">&quot;&quot;</span>)</span>
-<span id="cb3-14"><a href="#cb3-14"></a></span>
-<span id="cb3-15"><a href="#cb3-15"></a></span>
-<span id="cb3-16"><a href="#cb3-16"></a><span class="co"># index parameters</span></span>
-<span id="cb3-17"><a href="#cb3-17"></a><span class="co">#-----------------</span></span>
-<span id="cb3-18"><a href="#cb3-18"></a></span>
-<span id="cb3-19"><a href="#cb3-19"></a>M =<span class="st"> </span><span class="dv">15</span></span>
-<span id="cb3-20"><a href="#cb3-20"></a>efC =<span class="st"> </span><span class="dv">100</span></span>
-<span id="cb3-21"><a href="#cb3-21"></a>num_threads =<span class="st"> </span><span class="dv">5</span></span>
-<span id="cb3-22"><a href="#cb3-22"></a></span>
-<span id="cb3-23"><a href="#cb3-23"></a>index_params =<span class="st"> </span><span class="kw">list</span>(<span class="st">&#39;M&#39;</span>=<span class="st"> </span>M, <span class="st">&#39;indexThreadQty&#39;</span> =<span class="st"> </span>num_threads, <span class="st">&#39;efConstruction&#39;</span> =<span class="st"> </span>efC, </span>
-<span id="cb3-24"><a href="#cb3-24"></a>                    </span>
-<span id="cb3-25"><a href="#cb3-25"></a>                    <span class="st">&#39;post&#39;</span> =<span class="st"> </span><span class="dv">0</span>, <span class="st">&#39;skip_optimized_index&#39;</span> =<span class="st"> </span><span class="dv">1</span> )</span>
-<span id="cb3-26"><a href="#cb3-26"></a></span>
-<span id="cb3-27"><a href="#cb3-27"></a></span>
-<span id="cb3-28"><a href="#cb3-28"></a><span class="co"># query-time parameters</span></span>
-<span id="cb3-29"><a href="#cb3-29"></a><span class="co">#----------------------</span></span>
-<span id="cb3-30"><a href="#cb3-30"></a></span>
-<span id="cb3-31"><a href="#cb3-31"></a>efS =<span class="st"> </span><span class="dv">100</span></span>
-<span id="cb3-32"><a href="#cb3-32"></a></span>
-<span id="cb3-33"><a href="#cb3-33"></a>query_time_params =<span class="st"> </span><span class="kw">list</span>(<span class="st">&#39;efSearch&#39;</span> =<span class="st"> </span>efS)</span>
-<span id="cb3-34"><a href="#cb3-34"></a></span>
-<span id="cb3-35"><a href="#cb3-35"></a></span>
-<span id="cb3-36"><a href="#cb3-36"></a><span class="co"># Number of neighbors </span></span>
-<span id="cb3-37"><a href="#cb3-37"></a><span class="co">#--------------------</span></span>
-<span id="cb3-38"><a href="#cb3-38"></a></span>
-<span id="cb3-39"><a href="#cb3-39"></a>K =<span class="st"> </span><span class="dv">100</span></span>
-<span id="cb3-40"><a href="#cb3-40"></a></span>
-<span id="cb3-41"><a href="#cb3-41"></a></span>
-<span id="cb3-42"><a href="#cb3-42"></a><span class="co"># space to use</span></span>
-<span id="cb3-43"><a href="#cb3-43"></a><span class="co">#---------------</span></span>
-<span id="cb3-44"><a href="#cb3-44"></a></span>
-<span id="cb3-45"><a href="#cb3-45"></a>space_name =<span class="st"> &#39;l2sqr_sift&#39;</span>     </span>
-<span id="cb3-46"><a href="#cb3-46"></a></span>
-<span id="cb3-47"><a href="#cb3-47"></a></span>
-<span id="cb3-48"><a href="#cb3-48"></a><span class="co"># initialize NMSlib [ the data should be a matrix ]</span></span>
-<span id="cb3-49"><a href="#cb3-49"></a><span class="co">#--------------------------------------------------</span></span>
-<span id="cb3-50"><a href="#cb3-50"></a></span>
-<span id="cb3-51"><a href="#cb3-51"></a>init_nms =<span class="st"> </span>NMSlib<span class="op">$</span><span class="kw">new</span>(<span class="dt">input_data =</span> <span class="kw">as.matrix</span>(sift_10k), <span class="dt">Index_Params =</span> index_params, </span>
-<span id="cb3-52"><a href="#cb3-52"></a>                      </span>
-<span id="cb3-53"><a href="#cb3-53"></a>                      <span class="dt">Time_Params =</span> query_time_params, <span class="dt">space =</span> space_name, </span>
-<span id="cb3-54"><a href="#cb3-54"></a>                      </span>
-<span id="cb3-55"><a href="#cb3-55"></a>                      <span class="dt">space_params =</span> <span class="ot">NULL</span>, <span class="dt">method =</span> <span class="st">&#39;hnsw&#39;</span>, </span>
-<span id="cb3-56"><a href="#cb3-56"></a>                      </span>
-<span id="cb3-57"><a href="#cb3-57"></a>                      <span class="dt">data_type =</span> <span class="st">&#39;DENSE_UINT8_VECTOR&#39;</span>, <span class="dt">dtype =</span> <span class="st">&#39;INT&#39;</span>,</span>
-<span id="cb3-58"><a href="#cb3-58"></a>                      </span>
-<span id="cb3-59"><a href="#cb3-59"></a>                      <span class="dt">index_filepath =</span> <span class="ot">NULL</span>, <span class="dt">print_progress =</span> <span class="ot">FALSE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(nmslibR)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># download the data from my Github repository (tested on a Linux OS)</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co">#-------------------------------------------------------------------</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="fu">system</span>(<span class="st">&quot;wget https://raw.githubusercontent.com/mlampros/DataSets/master/sift_10k.txt&quot;</span>)</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="co"># load the data in the R session</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="co">#-------------------------------</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>sift_10k <span class="ot">=</span> <span class="fu">read.table</span>(<span class="st">&quot;~/sift_10k.txt&quot;</span>, <span class="at">quote=</span><span class="st">&quot;</span><span class="sc">\&quot;</span><span class="st">&quot;</span>, <span class="at">comment.char=</span><span class="st">&quot;&quot;</span>)</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="co"># index parameters</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="co">#-----------------</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>M <span class="ot">=</span> <span class="dv">15</span></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>efC <span class="ot">=</span> <span class="dv">100</span></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>num_threads <span class="ot">=</span> <span class="dv">5</span></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>index_params <span class="ot">=</span> <span class="fu">list</span>(<span class="st">&#39;M&#39;</span><span class="ot">=</span> M, <span class="st">&#39;indexThreadQty&#39;</span> <span class="ot">=</span> num_threads, <span class="st">&#39;efConstruction&#39;</span> <span class="ot">=</span> efC, </span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>                    </span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>                    <span class="st">&#39;post&#39;</span> <span class="ot">=</span> <span class="dv">0</span>, <span class="st">&#39;skip_optimized_index&#39;</span> <span class="ot">=</span> <span class="dv">1</span> )</span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a><span class="co"># query-time parameters</span></span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a><span class="co">#----------------------</span></span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>efS <span class="ot">=</span> <span class="dv">100</span></span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>query_time_params <span class="ot">=</span> <span class="fu">list</span>(<span class="st">&#39;efSearch&#39;</span> <span class="ot">=</span> efS)</span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a><span class="co"># Number of neighbors </span></span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a><span class="co">#--------------------</span></span>
+<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a>K <span class="ot">=</span> <span class="dv">100</span></span>
+<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a><span class="co"># space to use</span></span>
+<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a><span class="co">#---------------</span></span>
+<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a>space_name <span class="ot">=</span> <span class="st">&#39;l2sqr_sift&#39;</span>     </span>
+<span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-47"><a href="#cb3-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-48"><a href="#cb3-48" aria-hidden="true" tabindex="-1"></a><span class="co"># initialize NMSlib [ the data should be a matrix ]</span></span>
+<span id="cb3-49"><a href="#cb3-49" aria-hidden="true" tabindex="-1"></a><span class="co">#--------------------------------------------------</span></span>
+<span id="cb3-50"><a href="#cb3-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-51"><a href="#cb3-51" aria-hidden="true" tabindex="-1"></a>init_nms <span class="ot">=</span> NMSlib<span class="sc">$</span><span class="fu">new</span>(<span class="at">input_data =</span> <span class="fu">as.matrix</span>(sift_10k), <span class="at">Index_Params =</span> index_params, </span>
+<span id="cb3-52"><a href="#cb3-52" aria-hidden="true" tabindex="-1"></a>                      </span>
+<span id="cb3-53"><a href="#cb3-53" aria-hidden="true" tabindex="-1"></a>                      <span class="at">Time_Params =</span> query_time_params, <span class="at">space =</span> space_name, </span>
+<span id="cb3-54"><a href="#cb3-54" aria-hidden="true" tabindex="-1"></a>                      </span>
+<span id="cb3-55"><a href="#cb3-55" aria-hidden="true" tabindex="-1"></a>                      <span class="at">space_params =</span> <span class="cn">NULL</span>, <span class="at">method =</span> <span class="st">&#39;hnsw&#39;</span>, </span>
+<span id="cb3-56"><a href="#cb3-56" aria-hidden="true" tabindex="-1"></a>                      </span>
+<span id="cb3-57"><a href="#cb3-57" aria-hidden="true" tabindex="-1"></a>                      <span class="at">data_type =</span> <span class="st">&#39;DENSE_UINT8_VECTOR&#39;</span>, <span class="at">dtype =</span> <span class="st">&#39;INT&#39;</span>,</span>
+<span id="cb3-58"><a href="#cb3-58" aria-hidden="true" tabindex="-1"></a>                      </span>
+<span id="cb3-59"><a href="#cb3-59" aria-hidden="true" tabindex="-1"></a>                      <span class="at">index_filepath =</span> <span class="cn">NULL</span>, <span class="at">print_progress =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
 <p><br></p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="co"># returns a 1-dimensional vector</span></span>
-<span id="cb4-2"><a href="#cb4-2"></a><span class="co">#-------------------------------</span></span>
-<span id="cb4-3"><a href="#cb4-3"></a></span>
-<span id="cb4-4"><a href="#cb4-4"></a>init_nms<span class="op">$</span><span class="kw">Knn_Query</span>(<span class="dt">query_data_row =</span> <span class="kw">as.matrix</span>(sift_10k[<span class="dv">1</span>, ]), <span class="dt">k =</span> <span class="dv">5</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># returns a 1-dimensional vector</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co">#-------------------------------</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>init_nms<span class="sc">$</span><span class="fu">Knn_Query</span>(<span class="at">query_data_row =</span> <span class="fu">as.matrix</span>(sift_10k[<span class="dv">1</span>, ]), <span class="at">k =</span> <span class="dv">5</span>)</span></code></pre></div>
 <p><br></p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>[[<span class="dv">1</span>]]</span>
-<span id="cb5-2"><a href="#cb5-2"></a>[<span class="dv">1</span>]    <span class="dv">2</span>    <span class="dv">6</span> <span class="dv">4585</span> <span class="dv">9256</span>  <span class="dv">140</span>                    <span class="co"># indices</span></span>
-<span id="cb5-3"><a href="#cb5-3"></a></span>
-<span id="cb5-4"><a href="#cb5-4"></a>[[<span class="dv">2</span>]]</span>
-<span id="cb5-5"><a href="#cb5-5"></a>[<span class="dv">1</span>] <span class="dv">18724</span> <span class="dv">24320</span> <span class="dv">68158</span> <span class="dv">69067</span> <span class="dv">70321</span>               <span class="co"># distances</span></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>[[<span class="dv">1</span>]]</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>[<span class="dv">1</span>]    <span class="dv">2</span>    <span class="dv">6</span> <span class="dv">4585</span> <span class="dv">9256</span>  <span class="dv">140</span>                    <span class="co"># indices</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>[[<span class="dv">2</span>]]</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>[<span class="dv">1</span>] <span class="dv">18724</span> <span class="dv">24320</span> <span class="dv">68158</span> <span class="dv">69067</span> <span class="dv">70321</span>               <span class="co"># distances</span></span></code></pre></div>
 <p><br></p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="co"># returns knn&#39;s for all data</span></span>
-<span id="cb6-2"><a href="#cb6-2"></a><span class="co">#---------------------------</span></span>
-<span id="cb6-3"><a href="#cb6-3"></a></span>
-<span id="cb6-4"><a href="#cb6-4"></a>all_dat =<span class="st"> </span>init_nms<span class="op">$</span><span class="kw">knn_Query_Batch</span>(<span class="kw">as.matrix</span>(sift_10k), <span class="dt">k =</span> <span class="dv">5</span>, <span class="dt">num_threads =</span> <span class="dv">1</span>)</span>
-<span id="cb6-5"><a href="#cb6-5"></a></span>
-<span id="cb6-6"><a href="#cb6-6"></a><span class="kw">str</span>(all_dat)</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># returns knn&#39;s for all data</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co">#---------------------------</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>all_dat <span class="ot">=</span> init_nms<span class="sc">$</span><span class="fu">knn_Query_Batch</span>(<span class="fu">as.matrix</span>(sift_10k), <span class="at">k =</span> <span class="dv">5</span>, <span class="at">num_threads =</span> <span class="dv">1</span>)</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(all_dat)</span></code></pre></div>
 <p><br></p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="co"># a list of indices and distances for all observations</span></span>
-<span id="cb7-2"><a href="#cb7-2"></a><span class="co">#------------------------------------------------------</span></span>
-<span id="cb7-3"><a href="#cb7-3"></a></span>
-<span id="cb7-4"><a href="#cb7-4"></a>List of <span class="dv">2</span></span>
-<span id="cb7-5"><a href="#cb7-5"></a> <span class="op">$</span><span class="st"> </span>knn_idx <span class="op">:</span><span class="st"> </span>num [<span class="dv">1</span><span class="op">:</span><span class="dv">10000</span>, <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>] <span class="dv">3</span> <span class="dv">4</span> <span class="dv">1</span> <span class="dv">2</span> <span class="dv">13</span> <span class="dv">14</span> <span class="dv">1</span> <span class="dv">2</span> <span class="dv">30</span> <span class="dv">31</span> ...</span>
-<span id="cb7-6"><a href="#cb7-6"></a> <span class="op">$</span><span class="st"> </span>knn_dist<span class="op">:</span><span class="st"> </span>num [<span class="dv">1</span><span class="op">:</span><span class="dv">10000</span>, <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>] <span class="dv">18724</span> <span class="dv">14995</span> <span class="dv">18724</span> <span class="dv">14995</span> <span class="dv">21038</span> ...</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># a list of indices and distances for all observations</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co">#------------------------------------------------------</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>List of <span class="dv">2</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a> <span class="sc">$</span> knn_idx <span class="sc">:</span> num [<span class="dv">1</span><span class="sc">:</span><span class="dv">10000</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>] <span class="dv">3</span> <span class="dv">4</span> <span class="dv">1</span> <span class="dv">2</span> <span class="dv">13</span> <span class="dv">14</span> <span class="dv">1</span> <span class="dv">2</span> <span class="dv">30</span> <span class="dv">31</span> ...</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a> <span class="sc">$</span> knn_dist<span class="sc">:</span> num [<span class="dv">1</span><span class="sc">:</span><span class="dv">10000</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>] <span class="dv">18724</span> <span class="dv">14995</span> <span class="dv">18724</span> <span class="dv">14995</span> <span class="dv">21038</span> ...</span></code></pre></div>
 <p><br></p>
 <p>Details on the various methods and parameter settings can be found in the <a href="https://github.com/nmslib/nmslib/blob/master/manual/latex/manual.pdf">manual of the NMSLIB python Library</a>.</p>
 <p><br></p>
@@ -593,153 +405,153 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <p><br></p>
 <p>First load the data,</p>
 <p><br></p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="co"># using system(&#39;wget..&#39;) on a linux OS </span></span>
-<span id="cb8-2"><a href="#cb8-2"></a></span>
-<span id="cb8-3"><a href="#cb8-3"></a><span class="kw">system</span>(<span class="st">&quot;wget https://raw.githubusercontent.com/mlampros/DataSets/master/mnist.zip&quot;</span>)             </span>
-<span id="cb8-4"><a href="#cb8-4"></a></span>
-<span id="cb8-5"><a href="#cb8-5"></a>mnist &lt;-<span class="st"> </span><span class="kw">read.table</span>(<span class="kw">unz</span>(<span class="st">&quot;mnist.zip&quot;</span>, <span class="st">&quot;mnist.csv&quot;</span>), <span class="dt">nrows =</span> <span class="dv">70000</span>, <span class="dt">header =</span> T, </span>
-<span id="cb8-6"><a href="#cb8-6"></a>                    </span>
-<span id="cb8-7"><a href="#cb8-7"></a>                    <span class="dt">quote =</span> <span class="st">&quot;</span><span class="ch">\&quot;</span><span class="st">&quot;</span>, <span class="dt">sep =</span> <span class="st">&quot;,&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># using system(&#39;wget..&#39;) on a linux OS </span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="fu">system</span>(<span class="st">&quot;wget https://raw.githubusercontent.com/mlampros/DataSets/master/mnist.zip&quot;</span>)             </span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>mnist <span class="ot">&lt;-</span> <span class="fu">read.table</span>(<span class="fu">unz</span>(<span class="st">&quot;mnist.zip&quot;</span>, <span class="st">&quot;mnist.csv&quot;</span>), <span class="at">nrows =</span> <span class="dv">70000</span>, <span class="at">header =</span> T, </span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>                    </span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>                    <span class="at">quote =</span> <span class="st">&quot;</span><span class="sc">\&quot;</span><span class="st">&quot;</span>, <span class="at">sep =</span> <span class="st">&quot;,&quot;</span>)</span></code></pre></div>
 <p><br></p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a>X =<span class="st"> </span>mnist[, <span class="op">-</span><span class="kw">ncol</span>(mnist)]</span>
-<span id="cb9-2"><a href="#cb9-2"></a><span class="kw">dim</span>(X)</span>
-<span id="cb9-3"><a href="#cb9-3"></a></span>
-<span id="cb9-4"><a href="#cb9-4"></a><span class="co">## [1] 70000   784</span></span>
-<span id="cb9-5"><a href="#cb9-5"></a></span>
-<span id="cb9-6"><a href="#cb9-6"></a><span class="co"># the &#39;KernelKnnCV_nmslib&#39; function requires that the labels are numeric and start from 1 : Inf</span></span>
-<span id="cb9-7"><a href="#cb9-7"></a></span>
-<span id="cb9-8"><a href="#cb9-8"></a>y =<span class="st"> </span>mnist[, <span class="kw">ncol</span>(mnist)] <span class="op">+</span><span class="st"> </span><span class="dv">1</span>          </span>
-<span id="cb9-9"><a href="#cb9-9"></a><span class="kw">table</span>(y)</span>
-<span id="cb9-10"><a href="#cb9-10"></a></span>
-<span id="cb9-11"><a href="#cb9-11"></a><span class="co">## y</span></span>
-<span id="cb9-12"><a href="#cb9-12"></a><span class="co">##    1    2    3    4    5    6    7    8    9   10 </span></span>
-<span id="cb9-13"><a href="#cb9-13"></a><span class="co">## 6903 7877 6990 7141 6824 6313 6876 7293 6825 6958</span></span>
-<span id="cb9-14"><a href="#cb9-14"></a></span>
-<span id="cb9-15"><a href="#cb9-15"></a></span>
-<span id="cb9-16"><a href="#cb9-16"></a><span class="co"># evaluation metric</span></span>
-<span id="cb9-17"><a href="#cb9-17"></a></span>
-<span id="cb9-18"><a href="#cb9-18"></a>acc =<span class="st"> </span><span class="cf">function</span> (y_true, preds) {</span>
-<span id="cb9-19"><a href="#cb9-19"></a>  </span>
-<span id="cb9-20"><a href="#cb9-20"></a>  out =<span class="st"> </span><span class="kw">table</span>(y_true, <span class="kw">max.col</span>(preds, <span class="dt">ties.method =</span> <span class="st">&quot;random&quot;</span>))</span>
-<span id="cb9-21"><a href="#cb9-21"></a>  </span>
-<span id="cb9-22"><a href="#cb9-22"></a>  acc =<span class="st"> </span><span class="kw">sum</span>(<span class="kw">diag</span>(out))<span class="op">/</span><span class="kw">sum</span>(out)</span>
-<span id="cb9-23"><a href="#cb9-23"></a>  </span>
-<span id="cb9-24"><a href="#cb9-24"></a>  acc</span>
-<span id="cb9-25"><a href="#cb9-25"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>X <span class="ot">=</span> mnist[, <span class="sc">-</span><span class="fu">ncol</span>(mnist)]</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(X)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 70000   784</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="co"># the &#39;KernelKnnCV_nmslib&#39; function requires that the labels are numeric and start from 1 : Inf</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>y <span class="ot">=</span> mnist[, <span class="fu">ncol</span>(mnist)] <span class="sc">+</span> <span class="dv">1</span>          </span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(y)</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a><span class="do">## y</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="do">##    1    2    3    4    5    6    7    8    9   10 </span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a><span class="do">## 6903 7877 6990 7141 6824 6313 6876 7293 6825 6958</span></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a><span class="co"># evaluation metric</span></span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>acc <span class="ot">=</span> <span class="cf">function</span> (y_true, preds) {</span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>  out <span class="ot">=</span> <span class="fu">table</span>(y_true, <span class="fu">max.col</span>(preds, <span class="at">ties.method =</span> <span class="st">&quot;random&quot;</span>))</span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>  acc <span class="ot">=</span> <span class="fu">sum</span>(<span class="fu">diag</span>(out))<span class="sc">/</span><span class="fu">sum</span>(out)</span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a>  acc</span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
 <p><br></p>
 <p>then compute the HOG features,</p>
 <p><br></p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="kw">library</span>(OpenImageR)</span>
-<span id="cb10-2"><a href="#cb10-2"></a></span>
-<span id="cb10-3"><a href="#cb10-3"></a>hog =<span class="st"> </span><span class="kw">HOG_apply</span>(X, <span class="dt">cells =</span> <span class="dv">6</span>, <span class="dt">orientations =</span> <span class="dv">9</span>, <span class="dt">rows =</span> <span class="dv">28</span>, <span class="dt">columns =</span> <span class="dv">28</span>, <span class="dt">threads =</span> <span class="dv">6</span>)</span>
-<span id="cb10-4"><a href="#cb10-4"></a></span>
-<span id="cb10-5"><a href="#cb10-5"></a><span class="co">## </span></span>
-<span id="cb10-6"><a href="#cb10-6"></a><span class="co">## time to complete : 2.101281 secs  </span></span>
-<span id="cb10-7"><a href="#cb10-7"></a></span>
-<span id="cb10-8"><a href="#cb10-8"></a><span class="kw">dim</span>(hog)</span>
-<span id="cb10-9"><a href="#cb10-9"></a></span>
-<span id="cb10-10"><a href="#cb10-10"></a><span class="co">## [1] 70000   324</span></span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(OpenImageR)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>hog <span class="ot">=</span> <span class="fu">HOG_apply</span>(X, <span class="at">cells =</span> <span class="dv">6</span>, <span class="at">orientations =</span> <span class="dv">9</span>, <span class="at">rows =</span> <span class="dv">28</span>, <span class="at">columns =</span> <span class="dv">28</span>, <span class="at">threads =</span> <span class="dv">6</span>)</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="do">## time to complete : 2.101281 secs  </span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(hog)</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 70000   324</span></span></code></pre></div>
 <p><br></p>
 <p>then compute the <strong>approximate</strong> kernel k-nearest-neighbors using the <strong>cosine</strong> distance,</p>
 <p><br></p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a><span class="co"># parameters for &#39;KernelKnnCV_nmslib&#39;</span></span>
-<span id="cb11-2"><a href="#cb11-2"></a><span class="co">#------------------------------------</span></span>
-<span id="cb11-3"><a href="#cb11-3"></a></span>
-<span id="cb11-4"><a href="#cb11-4"></a>M =<span class="st"> </span><span class="dv">30</span></span>
-<span id="cb11-5"><a href="#cb11-5"></a>efC =<span class="st"> </span><span class="dv">100</span></span>
-<span id="cb11-6"><a href="#cb11-6"></a>num_threads =<span class="st"> </span><span class="dv">6</span></span>
-<span id="cb11-7"><a href="#cb11-7"></a></span>
-<span id="cb11-8"><a href="#cb11-8"></a>index_params =<span class="st"> </span><span class="kw">list</span>(<span class="st">&#39;M&#39;</span>=<span class="st"> </span>M, <span class="st">&#39;indexThreadQty&#39;</span> =<span class="st"> </span>num_threads, <span class="st">&#39;efConstruction&#39;</span> =<span class="st"> </span>efC,</span>
-<span id="cb11-9"><a href="#cb11-9"></a>                    </span>
-<span id="cb11-10"><a href="#cb11-10"></a>                    <span class="st">&#39;post&#39;</span> =<span class="st"> </span><span class="dv">0</span>, <span class="st">&#39;skip_optimized_index&#39;</span> =<span class="st"> </span><span class="dv">1</span> )</span>
-<span id="cb11-11"><a href="#cb11-11"></a></span>
-<span id="cb11-12"><a href="#cb11-12"></a></span>
-<span id="cb11-13"><a href="#cb11-13"></a>efS =<span class="st"> </span><span class="dv">100</span></span>
-<span id="cb11-14"><a href="#cb11-14"></a></span>
-<span id="cb11-15"><a href="#cb11-15"></a>query_time_params =<span class="st"> </span><span class="kw">list</span>(<span class="st">&#39;efSearch&#39;</span> =<span class="st"> </span>efS)</span>
-<span id="cb11-16"><a href="#cb11-16"></a></span>
-<span id="cb11-17"><a href="#cb11-17"></a></span>
-<span id="cb11-18"><a href="#cb11-18"></a><span class="co"># approximate kernel knn</span></span>
-<span id="cb11-19"><a href="#cb11-19"></a><span class="co">#-----------------------</span></span>
-<span id="cb11-20"><a href="#cb11-20"></a></span>
-<span id="cb11-21"><a href="#cb11-21"></a>fit_hog =<span class="st"> </span><span class="kw">KernelKnnCV_nmslib</span>(hog, y, <span class="dt">k =</span> <span class="dv">20</span>, <span class="dt">folds =</span> <span class="dv">4</span>, <span class="dt">h =</span> <span class="dv">1</span>, </span>
-<span id="cb11-22"><a href="#cb11-22"></a>                             <span class="dt">weights_function =</span> <span class="st">&#39;biweight_tricube_MULT&#39;</span>, </span>
-<span id="cb11-23"><a href="#cb11-23"></a>                             <span class="dt">Levels =</span> <span class="kw">sort</span>(<span class="kw">unique</span>(y)), <span class="dt">Index_Params =</span> index_params,</span>
-<span id="cb11-24"><a href="#cb11-24"></a>                             <span class="dt">Time_Params =</span> query_time_params, <span class="dt">space =</span> <span class="st">&quot;cosinesimil&quot;</span>, </span>
-<span id="cb11-25"><a href="#cb11-25"></a>                             <span class="dt">space_params =</span> <span class="ot">NULL</span>, <span class="dt">method =</span> <span class="st">&quot;hnsw&quot;</span>, <span class="dt">data_type =</span> <span class="st">&quot;DENSE_VECTOR&quot;</span>, </span>
-<span id="cb11-26"><a href="#cb11-26"></a>                             <span class="dt">dtype =</span> <span class="st">&quot;FLOAT&quot;</span>, <span class="dt">index_filepath =</span> <span class="ot">NULL</span>, <span class="dt">print_progress =</span> <span class="ot">FALSE</span>, </span>
-<span id="cb11-27"><a href="#cb11-27"></a>                             <span class="dt">num_threads =</span> <span class="dv">6</span>, <span class="dt">seed_num =</span> <span class="dv">1</span>)</span>
-<span id="cb11-28"><a href="#cb11-28"></a></span>
-<span id="cb11-29"><a href="#cb11-29"></a></span>
-<span id="cb11-30"><a href="#cb11-30"></a><span class="co"># cross-validation starts .. </span></span>
-<span id="cb11-31"><a href="#cb11-31"></a></span>
-<span id="cb11-32"><a href="#cb11-32"></a><span class="co"># |=================================================================================| 100%</span></span>
-<span id="cb11-33"><a href="#cb11-33"></a></span>
-<span id="cb11-34"><a href="#cb11-34"></a><span class="co"># time to complete : 32.88805 secs </span></span>
-<span id="cb11-35"><a href="#cb11-35"></a></span>
-<span id="cb11-36"><a href="#cb11-36"></a></span>
-<span id="cb11-37"><a href="#cb11-37"></a><span class="kw">str</span>(fit_hog)</span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># parameters for &#39;KernelKnnCV_nmslib&#39;</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="co">#------------------------------------</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>M <span class="ot">=</span> <span class="dv">30</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>efC <span class="ot">=</span> <span class="dv">100</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>num_threads <span class="ot">=</span> <span class="dv">6</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>index_params <span class="ot">=</span> <span class="fu">list</span>(<span class="st">&#39;M&#39;</span><span class="ot">=</span> M, <span class="st">&#39;indexThreadQty&#39;</span> <span class="ot">=</span> num_threads, <span class="st">&#39;efConstruction&#39;</span> <span class="ot">=</span> efC,</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>                    </span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>                    <span class="st">&#39;post&#39;</span> <span class="ot">=</span> <span class="dv">0</span>, <span class="st">&#39;skip_optimized_index&#39;</span> <span class="ot">=</span> <span class="dv">1</span> )</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>efS <span class="ot">=</span> <span class="dv">100</span></span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>query_time_params <span class="ot">=</span> <span class="fu">list</span>(<span class="st">&#39;efSearch&#39;</span> <span class="ot">=</span> efS)</span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a><span class="co"># approximate kernel knn</span></span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a><span class="co">#-----------------------</span></span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a>fit_hog <span class="ot">=</span> <span class="fu">KernelKnnCV_nmslib</span>(hog, y, <span class="at">k =</span> <span class="dv">20</span>, <span class="at">folds =</span> <span class="dv">4</span>, <span class="at">h =</span> <span class="dv">1</span>, </span>
+<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a>                             <span class="at">weights_function =</span> <span class="st">&#39;biweight_tricube_MULT&#39;</span>, </span>
+<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a>                             <span class="at">Levels =</span> <span class="fu">sort</span>(<span class="fu">unique</span>(y)), <span class="at">Index_Params =</span> index_params,</span>
+<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a>                             <span class="at">Time_Params =</span> query_time_params, <span class="at">space =</span> <span class="st">&quot;cosinesimil&quot;</span>, </span>
+<span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a>                             <span class="at">space_params =</span> <span class="cn">NULL</span>, <span class="at">method =</span> <span class="st">&quot;hnsw&quot;</span>, <span class="at">data_type =</span> <span class="st">&quot;DENSE_VECTOR&quot;</span>, </span>
+<span id="cb11-26"><a href="#cb11-26" aria-hidden="true" tabindex="-1"></a>                             <span class="at">dtype =</span> <span class="st">&quot;FLOAT&quot;</span>, <span class="at">index_filepath =</span> <span class="cn">NULL</span>, <span class="at">print_progress =</span> <span class="cn">FALSE</span>, </span>
+<span id="cb11-27"><a href="#cb11-27" aria-hidden="true" tabindex="-1"></a>                             <span class="at">num_threads =</span> <span class="dv">6</span>, <span class="at">seed_num =</span> <span class="dv">1</span>)</span>
+<span id="cb11-28"><a href="#cb11-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-29"><a href="#cb11-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-30"><a href="#cb11-30" aria-hidden="true" tabindex="-1"></a><span class="co"># cross-validation starts .. </span></span>
+<span id="cb11-31"><a href="#cb11-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-32"><a href="#cb11-32" aria-hidden="true" tabindex="-1"></a><span class="co"># |=================================================================================| 100%</span></span>
+<span id="cb11-33"><a href="#cb11-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-34"><a href="#cb11-34" aria-hidden="true" tabindex="-1"></a><span class="co"># time to complete : 32.88805 secs </span></span>
+<span id="cb11-35"><a href="#cb11-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-36"><a href="#cb11-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-37"><a href="#cb11-37" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(fit_hog)</span></code></pre></div>
 <p><br></p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a>List of <span class="dv">2</span></span>
-<span id="cb12-2"><a href="#cb12-2"></a> <span class="op">$</span><span class="st"> </span>preds<span class="op">:</span>List of <span class="dv">4</span></span>
-<span id="cb12-3"><a href="#cb12-3"></a>  ..<span class="op">$</span><span class="st"> </span><span class="er">:</span><span class="st"> </span>num [<span class="dv">1</span><span class="op">:</span><span class="dv">17500</span>, <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>] <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span> ...</span>
-<span id="cb12-4"><a href="#cb12-4"></a>  ..<span class="op">$</span><span class="st"> </span><span class="er">:</span><span class="st"> </span>num [<span class="dv">1</span><span class="op">:</span><span class="dv">17500</span>, <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>] <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span> <span class="dv">1</span> ...</span>
-<span id="cb12-5"><a href="#cb12-5"></a>  ..<span class="op">$</span><span class="st"> </span><span class="er">:</span><span class="st"> </span>num [<span class="dv">1</span><span class="op">:</span><span class="dv">17500</span>, <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>] <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span> ...</span>
-<span id="cb12-6"><a href="#cb12-6"></a>  ..<span class="op">$</span><span class="st"> </span><span class="er">:</span><span class="st"> </span>num [<span class="dv">1</span><span class="op">:</span><span class="dv">17500</span>, <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>] <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span> ...</span>
-<span id="cb12-7"><a href="#cb12-7"></a> <span class="op">$</span><span class="st"> </span>folds<span class="op">:</span>List of <span class="dv">4</span></span>
-<span id="cb12-8"><a href="#cb12-8"></a>  ..<span class="op">$</span><span class="st"> </span>fold_<span class="dv">1</span><span class="op">:</span><span class="st"> </span>int [<span class="dv">1</span><span class="op">:</span><span class="dv">17500</span>] <span class="dv">49808</span> <span class="dv">21991</span> <span class="dv">42918</span> <span class="dv">7967</span> <span class="dv">49782</span> <span class="dv">28979</span> <span class="dv">64440</span> <span class="dv">49809</span> <span class="dv">30522</span> <span class="dv">36673</span> ...</span>
-<span id="cb12-9"><a href="#cb12-9"></a>  ..<span class="op">$</span><span class="st"> </span>fold_<span class="dv">2</span><span class="op">:</span><span class="st"> </span>int [<span class="dv">1</span><span class="op">:</span><span class="dv">17500</span>] <span class="dv">51122</span> <span class="dv">9469</span> <span class="dv">58021</span> <span class="dv">45228</span> <span class="dv">2944</span> <span class="dv">58052</span> <span class="dv">65074</span> <span class="dv">17709</span> <span class="dv">2532</span> <span class="dv">31262</span> ...</span>
-<span id="cb12-10"><a href="#cb12-10"></a>  ..<span class="op">$</span><span class="st"> </span>fold_<span class="dv">3</span><span class="op">:</span><span class="st"> </span>int [<span class="dv">1</span><span class="op">:</span><span class="dv">17500</span>] <span class="dv">33205</span> <span class="dv">40078</span> <span class="dv">68177</span> <span class="dv">32620</span> <span class="dv">52721</span> <span class="dv">18981</span> <span class="dv">19417</span> <span class="dv">53922</span> <span class="dv">19102</span> <span class="dv">67206</span> ...</span>
-<span id="cb12-11"><a href="#cb12-11"></a>  ..<span class="op">$</span><span class="st"> </span>fold_<span class="dv">4</span><span class="op">:</span><span class="st"> </span>int [<span class="dv">1</span><span class="op">:</span><span class="dv">17500</span>] <span class="dv">28267</span> <span class="dv">41652</span> <span class="dv">28514</span> <span class="dv">34525</span> <span class="dv">68534</span> <span class="dv">13294</span> <span class="dv">48759</span> <span class="dv">47521</span> <span class="dv">69395</span> <span class="dv">41408</span> ...</span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>List of <span class="dv">2</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a> <span class="sc">$</span> preds<span class="sc">:</span>List of <span class="dv">4</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  ..<span class="sc">$</span> <span class="er">:</span> num [<span class="dv">1</span><span class="sc">:</span><span class="dv">17500</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>] <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span> ...</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  ..<span class="sc">$</span> <span class="er">:</span> num [<span class="dv">1</span><span class="sc">:</span><span class="dv">17500</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>] <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span> <span class="dv">1</span> ...</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  ..<span class="sc">$</span> <span class="er">:</span> num [<span class="dv">1</span><span class="sc">:</span><span class="dv">17500</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>] <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span> ...</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  ..<span class="sc">$</span> <span class="er">:</span> num [<span class="dv">1</span><span class="sc">:</span><span class="dv">17500</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>] <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span> ...</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a> <span class="sc">$</span> folds<span class="sc">:</span>List of <span class="dv">4</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>  ..<span class="sc">$</span> fold_1<span class="sc">:</span> int [<span class="dv">1</span><span class="sc">:</span><span class="dv">17500</span>] <span class="dv">49808</span> <span class="dv">21991</span> <span class="dv">42918</span> <span class="dv">7967</span> <span class="dv">49782</span> <span class="dv">28979</span> <span class="dv">64440</span> <span class="dv">49809</span> <span class="dv">30522</span> <span class="dv">36673</span> ...</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>  ..<span class="sc">$</span> fold_2<span class="sc">:</span> int [<span class="dv">1</span><span class="sc">:</span><span class="dv">17500</span>] <span class="dv">51122</span> <span class="dv">9469</span> <span class="dv">58021</span> <span class="dv">45228</span> <span class="dv">2944</span> <span class="dv">58052</span> <span class="dv">65074</span> <span class="dv">17709</span> <span class="dv">2532</span> <span class="dv">31262</span> ...</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>  ..<span class="sc">$</span> fold_3<span class="sc">:</span> int [<span class="dv">1</span><span class="sc">:</span><span class="dv">17500</span>] <span class="dv">33205</span> <span class="dv">40078</span> <span class="dv">68177</span> <span class="dv">32620</span> <span class="dv">52721</span> <span class="dv">18981</span> <span class="dv">19417</span> <span class="dv">53922</span> <span class="dv">19102</span> <span class="dv">67206</span> ...</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>  ..<span class="sc">$</span> fold_4<span class="sc">:</span> int [<span class="dv">1</span><span class="sc">:</span><span class="dv">17500</span>] <span class="dv">28267</span> <span class="dv">41652</span> <span class="dv">28514</span> <span class="dv">34525</span> <span class="dv">68534</span> <span class="dv">13294</span> <span class="dv">48759</span> <span class="dv">47521</span> <span class="dv">69395</span> <span class="dv">41408</span> ...</span></code></pre></div>
 <p><br></p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a>acc_fit_hog =<span class="st"> </span><span class="kw">unlist</span>(<span class="kw">lapply</span>(<span class="dv">1</span><span class="op">:</span><span class="kw">length</span>(fit_hog<span class="op">$</span>preds), </span>
-<span id="cb13-2"><a href="#cb13-2"></a>                            </span>
-<span id="cb13-3"><a href="#cb13-3"></a>                            <span class="cf">function</span>(x) <span class="kw">acc</span>(y[fit_hog<span class="op">$</span>folds[[x]]], </span>
-<span id="cb13-4"><a href="#cb13-4"></a>                                            </span>
-<span id="cb13-5"><a href="#cb13-5"></a>                                            fit_hog<span class="op">$</span>preds[[x]])))</span>
-<span id="cb13-6"><a href="#cb13-6"></a>acc_fit_hog</span>
-<span id="cb13-7"><a href="#cb13-7"></a></span>
-<span id="cb13-8"><a href="#cb13-8"></a><span class="co">## [1] 0.9768000 0.9786857 0.9763429 0.9760000</span></span>
-<span id="cb13-9"><a href="#cb13-9"></a></span>
-<span id="cb13-10"><a href="#cb13-10"></a><span class="kw">cat</span>(<span class="st">&#39;mean accuracy for hog-features using cross-validation :&#39;</span>, <span class="kw">mean</span>(acc_fit_hog), <span class="st">&#39;</span><span class="ch">\n</span><span class="st">&#39;</span>)</span>
-<span id="cb13-11"><a href="#cb13-11"></a></span>
-<span id="cb13-12"><a href="#cb13-12"></a><span class="co">## mean accuracy for hog-features using cross-validation : 0.9769571</span></span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>acc_fit_hog <span class="ot">=</span> <span class="fu">unlist</span>(<span class="fu">lapply</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(fit_hog<span class="sc">$</span>preds), </span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>                            </span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>                            <span class="cf">function</span>(x) <span class="fu">acc</span>(y[fit_hog<span class="sc">$</span>folds[[x]]], </span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>                                            </span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>                                            fit_hog<span class="sc">$</span>preds[[x]])))</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>acc_fit_hog</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 0.9768000 0.9786857 0.9763429 0.9760000</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&#39;mean accuracy for hog-features using cross-validation :&#39;</span>, <span class="fu">mean</span>(acc_fit_hog), <span class="st">&#39;</span><span class="sc">\n</span><span class="st">&#39;</span>)</span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a><span class="do">## mean accuracy for hog-features using cross-validation : 0.9769571</span></span></code></pre></div>
 <p><br></p>
 <p>It took approx. <strong>33 seconds</strong> to return with an accuracy of <strong>97.7 %</strong> . Almost <strong>47 times faster</strong> than KernelKnn’s corresponding function (brute force) with a <strong>slight lower accuracy</strong> rate (the <em>braycurtis</em> distance metric might be better suited for this dataset).</p>
 <p>I also run the corresponding brute-force algorithm of the NMSLIB Library by setting the <em>method</em> parameter to <strong>seq_search</strong>,</p>
 <p><br></p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a><span class="co"># brute force of NMSLIB   [ here we set &#39;Index_Params&#39; and &#39;Time_Params&#39; to NULL ]</span></span>
-<span id="cb14-2"><a href="#cb14-2"></a><span class="co">#----------------------</span></span>
-<span id="cb14-3"><a href="#cb14-3"></a></span>
-<span id="cb14-4"><a href="#cb14-4"></a>fit_hog_seq =<span class="st"> </span><span class="kw">KernelKnnCV_nmslib</span>(hog, y, <span class="dt">k =</span> <span class="dv">20</span>, <span class="dt">folds =</span> <span class="dv">4</span>, <span class="dt">h =</span> <span class="dv">1</span>, </span>
-<span id="cb14-5"><a href="#cb14-5"></a>                                <span class="dt">weights_function =</span> <span class="st">&#39;biweight_tricube_MULT&#39;</span>, </span>
-<span id="cb14-6"><a href="#cb14-6"></a>                                <span class="dt">Levels =</span> <span class="kw">sort</span>(<span class="kw">unique</span>(y)), <span class="dt">Index_Params =</span> <span class="ot">NULL</span>,</span>
-<span id="cb14-7"><a href="#cb14-7"></a>                                <span class="dt">Time_Params =</span> <span class="ot">NULL</span>, <span class="dt">space =</span> <span class="st">&quot;cosinesimil&quot;</span>, </span>
-<span id="cb14-8"><a href="#cb14-8"></a>                                <span class="dt">space_params =</span> <span class="ot">NULL</span>, <span class="dt">method =</span> <span class="st">&quot;seq_search&quot;</span>, </span>
-<span id="cb14-9"><a href="#cb14-9"></a>                                <span class="dt">data_type =</span> <span class="st">&quot;DENSE_VECTOR&quot;</span>, <span class="dt">dtype =</span> <span class="st">&quot;FLOAT&quot;</span>, </span>
-<span id="cb14-10"><a href="#cb14-10"></a>                                <span class="dt">index_filepath =</span> <span class="ot">NULL</span>, <span class="dt">print_progress =</span> <span class="ot">FALSE</span>, </span>
-<span id="cb14-11"><a href="#cb14-11"></a>                                <span class="dt">num_threads =</span> <span class="dv">6</span>, <span class="dt">seed_num =</span> <span class="dv">1</span>)</span>
-<span id="cb14-12"><a href="#cb14-12"></a></span>
-<span id="cb14-13"><a href="#cb14-13"></a></span>
-<span id="cb14-14"><a href="#cb14-14"></a><span class="co"># cross-validation starts .. </span></span>
-<span id="cb14-15"><a href="#cb14-15"></a></span>
-<span id="cb14-16"><a href="#cb14-16"></a><span class="co"># |=================================================================================| 100%</span></span>
-<span id="cb14-17"><a href="#cb14-17"></a></span>
-<span id="cb14-18"><a href="#cb14-18"></a><span class="co"># time to complete : 4.506177 mins  </span></span>
-<span id="cb14-19"><a href="#cb14-19"></a></span>
-<span id="cb14-20"><a href="#cb14-20"></a></span>
-<span id="cb14-21"><a href="#cb14-21"></a>acc_fit_hog_seq =<span class="st"> </span><span class="kw">unlist</span>(<span class="kw">lapply</span>(<span class="dv">1</span><span class="op">:</span><span class="kw">length</span>(fit_hog_seq<span class="op">$</span>preds), </span>
-<span id="cb14-22"><a href="#cb14-22"></a>                                </span>
-<span id="cb14-23"><a href="#cb14-23"></a>                                <span class="cf">function</span>(x) <span class="kw">acc</span>(y[fit_hog_seq<span class="op">$</span>folds[[x]]], </span>
-<span id="cb14-24"><a href="#cb14-24"></a>                                                </span>
-<span id="cb14-25"><a href="#cb14-25"></a>                                                fit_hog_seq<span class="op">$</span>preds[[x]])))</span>
-<span id="cb14-26"><a href="#cb14-26"></a>acc_fit_hog_seq</span>
-<span id="cb14-27"><a href="#cb14-27"></a></span>
-<span id="cb14-28"><a href="#cb14-28"></a><span class="co">## [1] 0.9785143 0.9802286 0.9783429 0.9784571</span></span>
-<span id="cb14-29"><a href="#cb14-29"></a></span>
-<span id="cb14-30"><a href="#cb14-30"></a><span class="kw">cat</span>(<span class="st">&#39;mean accuracy for hog-features using cross-validation :&#39;</span>, <span class="kw">mean</span>(acc_fit_hog_seq), <span class="st">&#39;</span><span class="ch">\n</span><span class="st">&#39;</span>)</span>
-<span id="cb14-31"><a href="#cb14-31"></a></span>
-<span id="cb14-32"><a href="#cb14-32"></a><span class="co">## mean accuracy for hog-features using cross-validation : 0.9788857</span></span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># brute force of NMSLIB   [ here we set &#39;Index_Params&#39; and &#39;Time_Params&#39; to NULL ]</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="co">#----------------------</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>fit_hog_seq <span class="ot">=</span> <span class="fu">KernelKnnCV_nmslib</span>(hog, y, <span class="at">k =</span> <span class="dv">20</span>, <span class="at">folds =</span> <span class="dv">4</span>, <span class="at">h =</span> <span class="dv">1</span>, </span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>                                <span class="at">weights_function =</span> <span class="st">&#39;biweight_tricube_MULT&#39;</span>, </span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>                                <span class="at">Levels =</span> <span class="fu">sort</span>(<span class="fu">unique</span>(y)), <span class="at">Index_Params =</span> <span class="cn">NULL</span>,</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>                                <span class="at">Time_Params =</span> <span class="cn">NULL</span>, <span class="at">space =</span> <span class="st">&quot;cosinesimil&quot;</span>, </span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>                                <span class="at">space_params =</span> <span class="cn">NULL</span>, <span class="at">method =</span> <span class="st">&quot;seq_search&quot;</span>, </span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>                                <span class="at">data_type =</span> <span class="st">&quot;DENSE_VECTOR&quot;</span>, <span class="at">dtype =</span> <span class="st">&quot;FLOAT&quot;</span>, </span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>                                <span class="at">index_filepath =</span> <span class="cn">NULL</span>, <span class="at">print_progress =</span> <span class="cn">FALSE</span>, </span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>                                <span class="at">num_threads =</span> <span class="dv">6</span>, <span class="at">seed_num =</span> <span class="dv">1</span>)</span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a><span class="co"># cross-validation starts .. </span></span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a><span class="co"># |=================================================================================| 100%</span></span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a><span class="co"># time to complete : 4.506177 mins  </span></span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a>acc_fit_hog_seq <span class="ot">=</span> <span class="fu">unlist</span>(<span class="fu">lapply</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(fit_hog_seq<span class="sc">$</span>preds), </span>
+<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a>                                </span>
+<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a>                                <span class="cf">function</span>(x) <span class="fu">acc</span>(y[fit_hog_seq<span class="sc">$</span>folds[[x]]], </span>
+<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a>                                                </span>
+<span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a>                                                fit_hog_seq<span class="sc">$</span>preds[[x]])))</span>
+<span id="cb14-26"><a href="#cb14-26" aria-hidden="true" tabindex="-1"></a>acc_fit_hog_seq</span>
+<span id="cb14-27"><a href="#cb14-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-28"><a href="#cb14-28" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 0.9785143 0.9802286 0.9783429 0.9784571</span></span>
+<span id="cb14-29"><a href="#cb14-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-30"><a href="#cb14-30" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&#39;mean accuracy for hog-features using cross-validation :&#39;</span>, <span class="fu">mean</span>(acc_fit_hog_seq), <span class="st">&#39;</span><span class="sc">\n</span><span class="st">&#39;</span>)</span>
+<span id="cb14-31"><a href="#cb14-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-32"><a href="#cb14-32" aria-hidden="true" tabindex="-1"></a><span class="do">## mean accuracy for hog-features using cross-validation : 0.9788857</span></span></code></pre></div>
 <p><br></p>
 <p>The brute-force algorithm of the NMSLIB Library is almost <strong>6 times faster</strong> than KernelKnn giving an accuracy of approx. <strong>97.9 %</strong>.</p>
 </div>
